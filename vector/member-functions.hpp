@@ -13,6 +13,33 @@ vector<T, Allocator>::vector()
 }
 
 template <typename T, typename Alloc>
+vector<T, Alloc>::vector(Alloc const &alloc) : mem_manager(alloc)
+{
+	_clear_worked = false;
+	_size = 0;
+	_index = 0;
+	_capacity = 0;
+	_arr = NULL;
+	_max_size = mem_manager.max_size();
+}
+
+template <typename T, typename Alloc>
+vector<T, Alloc>::vector(size_type count)
+{
+	_max_size = mem_manager.max_size();
+	if (count > _max_size)
+		throw std::length_error("invalid length");
+	_clear_worked = false;
+	_size = count;
+	_capacity = count;
+	_index = count;
+	_arr = mem_manager.allocate(_capacity);
+
+	for (int i = 0; i < _size; ++i)
+		mem_manager.construct(_arr + i);
+}
+
+template <typename T, typename Alloc>
 vector<T, Alloc>::vector(vector const &cp)
 {
 //	_size = 0; if error look here
@@ -34,7 +61,7 @@ vector<T, Allocator>::vector(size_type count,
 	_capacity = count;
 	_arr = mem_manager.allocate(_capacity);
 	for (int i = _index - 1; i >= 0; --i)
-		_arr[i] = value;
+		mem_manager.construct(_arr + i, value);
 }
 
 template <typename T, typename Allocator>
@@ -63,7 +90,7 @@ vector<T, Allocator>
 		mem_manager = rhs.mem_manager;
 		_arr = mem_manager.allocate(_capacity);
 		for (int i = 0; i < _size; ++i)
-			_arr[i] = rhs._arr[i];
+			mem_manager.construct(_arr + i, rhs._arr[i]);
 	}
 	return *this;
 }

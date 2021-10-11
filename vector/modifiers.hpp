@@ -47,4 +47,10 @@ void	vector<T, Alloc>::pop_back()
 	}
 }
 
+template <typename T, typename Alloc>
+void	vector<T, Alloc>::resize(size_type count, T value)
+{
+	/// stops herre
+}
+
 #endif

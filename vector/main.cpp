@@ -13,6 +13,9 @@ std::ostream	&operator<< (std::ostream &os, ft::vector<T> &v)
 
 class	A{
 	public:
+		A(){
+			std::cout << "constructor" << std::endl;
+		}
 		~A(){
 			std::cout << "destructor called" << std::endl;
 		};
@@ -20,10 +23,11 @@ class	A{
 
 int main()
 {
-	ft::vector<A> a(12);
+	ft::vector<int> h(9, 34);
+	ft::vector<int> c;
 
-	//a.pop_back();
-
-	int y;
-	std::cin >> y;
+	c = h;
+	c[0] = 89;
+	std::cout << h << std::endl;
+	std::cout << c << std::endl;
 }

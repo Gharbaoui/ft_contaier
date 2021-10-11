@@ -16,9 +16,11 @@ class	vector{
 		typedef const value_type&	const_reference;
 	/// member functions
 		vector();
+		explicit vector(size_type count);
 		vector(vector const &);
+		explicit vector(const Allocator& alloc);
 		explicit 		vector( size_type count,
-                 		const T& value = T(),
+                 		const T& value,
                  		const Allocator& alloc = Allocator());
 		~vector();
 		vector			&operator=(vector const &);
@@ -46,6 +48,7 @@ class	vector{
 		void			clear();
 		void			push_back(const T&);
 		void			pop_back();
+		void			resize(size_type count, T value = T());
 		// helpers
 		void			range_destroy(int, int, int);
 	private:
