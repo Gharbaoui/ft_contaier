@@ -1,17 +1,10 @@
 #ifndef IS_INTEGRAL
 #define IS_INTEGRAL
 // helpers
+namespace ft{
 template <bool val>
 struct ft_type{
 	static const bool value = val;
-};
-
-template <bool, typename T=bool>
-struct ft_enable{};
-
-template <typename T>
-struct ft_enable<true, T>{
-	typedef T type;
 };
 
 // helpers end
@@ -63,4 +56,13 @@ struct is_integral<long long> : ft_type<true> {};
 template <>
 struct is_integral<unsigned long long> : ft_type<true> {};
 
+template <>
+struct is_integral<float> : ft_type<true> {};
+
+template <>
+struct is_integral<double> : ft_type<true> {};
+
+template <>
+struct is_integral<long double> : ft_type<true> {};
+};
 #endif

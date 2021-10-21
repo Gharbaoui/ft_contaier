@@ -5,8 +5,20 @@
 
 #include <memory>
 #include <stdexcept>
+#include "../iterator-traits/iterator-traits.hpp"
+#include "../iterator-traits/iterators.hpp"
+#include "../helper/is-integral.hpp"
+#include "../helper/simple.hpp"
 namespace ft{
-#include "is-integral.hpp"
+
+
+template <typename T>
+void	my_swap(T &a, T &b)
+{
+	T c = a;
+	a = b;
+	b = c;
+}
 
 template <
 	typename T,
@@ -14,13 +26,16 @@ template <
 >
 class	vector{
 	public:
-		typedef T					value_type;
-		typedef	size_t				size_type;
-		typedef Allocator			allocator_type;
-		typedef value_type&			reference;
-		typedef const value_type&	const_reference;
-		typedef	ptrdiff_t			difference_type;
-
+		typedef T														value_type;
+		typedef	size_t													size_type;
+		typedef Allocator												allocator_type;
+		typedef value_type&												reference;
+		typedef const value_type&										const_reference;
+		typedef	ptrdiff_t												difference_type;
+		typedef	ft::random_access_iterator<T*, difference_type>			iterator;
+		typedef	ft::random_access_iterator<const T*, difference_type>	const_iterator;
+		typedef	ft::rev_iterator<T*, difference_type>					reverse_iterator;
+		typedef	ft::rev_iterator<const T*, difference_type>				const_reverse_iterator;
 	/// member functions
 		vector(){
 			_size = 0;
@@ -67,11 +82,12 @@ class	vector{
 		template <typename InputIt>
 		vector(InputIt first, InputIt last,
        	const Allocator& alloc = Allocator(),
-		typename ft_enable<!is_integral<InputIt>::value>::type=true
+		typename ft::enable_if<!ft::is_integral<InputIt>::value>::type=true
 		)
 		{
 			_max_size = mem_manager.max_size();
 			_capacity = last - first;
+		//	_capacity = ft::distance(first, last);
 			if (_capacity > _max_size)
 				throw std::length_error("invalid length");
 			_size = _capacity;
@@ -116,6 +132,28 @@ class	vector{
 			}
 			for (int i = 0; i < _size; ++i)
 				_arr[i] = value;
+		}
+		template <typename Iter>
+		void	assign(Iter first, Iter last, typename ft::enable_if<!ft::is_integral<Iter>::value>::type=true)
+		{
+			size_type count;
+			count = last - first;
+			if (count > _max_size)
+				throw std::length_error("invalid length");
+			_index = count;
+			_size = count;
+			if (count > _capacity){
+				_capacity = count;
+				_size = count;
+				_index = count;
+				range_destroy(0, _size, _capacity);
+				_arr = mem_manager.allocate(_capacity);
+			}
+			int i = 0;
+			for (; first != last; ++first) {
+				_arr[i] = *first;
+				++i;
+			}
 		}
 		allocator_type	get_allocator() const{
 			return mem_manager;
@@ -211,6 +249,88 @@ class	vector{
 			_size = 0;
 			_index = 0;
 		}
+		iterator insert(iterator where, const T& value)
+		{
+			size_type pos; 
+			pos = &(*where) - _arr; // this will give me where i should put value in _arr
+			if (_capacity > _size) { // we already have enaugh space all we  need is to move right
+				if (pos < _index) {
+					for (int i = _index - 1; i > pos; --i)
+						_arr[i + 1] = _arr[i];
+					_arr[pos] = value;
+				}else if (pos == _index)
+					_arr[_index] = value;
+				++_size;
+				++_index;
+			}else{
+				++_size;
+				++_index;
+				size_type old_cap = _capacity;
+				if (!_capacity)
+					_capacity = 1;
+				else
+					_capacity *= 2;
+				T*	_new_arr = mem_manager.allocate(_capacity);
+				for (int i = 0; (i < pos && i < _size - 1); ++i)
+					mem_manager.construct(_new_arr + i, _arr[i]);
+				if (pos < _size)
+					mem_manager.construct(_new_arr + pos, value);
+				for (int i = pos + 1; i < _size; ++i)
+					mem_manager.construct(_new_arr + i, _arr[i - 1]);
+				range_destroy(0, _size, old_cap);
+				_arr = _new_arr;
+			}
+			return iterator(_arr + pos);
+		}
+		void insert(iterator where, size_type count, const T& value) {
+			size_type pos; 
+			pos = &(*where) - _arr; // this will give me where i should put value in _arr
+			
+			if (_capacity > _size + count)
+			{
+				if (pos <= _index)
+				{
+					int i = _index - 1;
+					if (i < 0)
+						++i;
+					for (; i > pos; --i)
+						_arr[i + count] = _arr[i];
+					i = 0;
+					while (i < count)
+					{
+						_arr[pos] = value;
+						++pos;
+						++i;
+					}
+				}
+				_size += count;
+				_index += count;
+			}else{
+				size_type old_cap = _capacity;
+				T*		_new_arr;
+				if (2 * _capacity < _capacity + count)
+					_capacity += count;
+				else
+					_capacity *= 2;
+				_size += count;
+				_index = _size;
+	
+				_new_arr = mem_manager.allocate(_capacity);
+				for (int i = 0; (i < _size - count && i < pos) ; ++i)
+					mem_manager.construct(_new_arr + i, _arr[i]);
+				if (pos < _size)
+				{
+					int j = count;
+					for (int i = pos; j--; ++i)
+						mem_manager.construct(_new_arr + i, value);
+					j = 0;
+					for (int i = pos + count; i < _size; ++i)
+						mem_manager.construct(_new_arr + i, _arr[j++]);
+				}
+				range_destroy(0, _size, old_cap);
+				_arr = _new_arr;
+			}
+		}
 		void			push_back(const T& val)
 		{
 			T *new_arr;
@@ -220,7 +340,10 @@ class	vector{
 				_arr[_index] = val;
 			else {
 				old_cap = _capacity;
-			   _capacity *= 2;
+				if (!_capacity)
+					_capacity = 1;
+				else
+			   		_capacity *= 2;
 				new_arr = mem_manager.allocate(_capacity);
 				int i;
 				for (i = 0; i < _size; ++i)
@@ -319,6 +442,43 @@ class	vector{
 			my_swap(mem_manager, other.mem_manager);
 			my_swap(_arr, other._arr);
 		}
+
+		////
+		iterator	begin() {
+			return iterator(_arr);
+		};
+		iterator	end() {
+			return iterator(_arr + _size);
+		}
+
+		const_iterator	begin() const {
+			return _arr;
+		}
+		const_iterator	end() const
+		{
+			return _arr + _size;
+		}
+
+		reverse_iterator	rbegin()
+		{
+			return	_arr + (_size - 1);
+		}
+		
+		reverse_iterator	rend()
+		{
+			return	_arr - 1;
+		}
+
+		const_reverse_iterator	rbegin() const
+		{
+			return	_arr + (_size - 1);
+		}
+		
+		const_reverse_iterator	rend() const
+		{
+			return	_arr - 1;
+		}
+
 	private:
 		T					*_arr;
 		size_t				_size;
@@ -344,14 +504,5 @@ class	vector{
 			mem_manager.deallocate(_arr , cap);
 		}
 };
-
-template <typename T>
-void	my_swap(T &a, T &b)
-{
-	T c = a;
-	a = b;
-	b = c;
-}
-
-}
+};
 #endif

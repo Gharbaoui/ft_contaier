@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "__split_buffer": "cpp",
+        "forward_list": "cpp",
+        "initializer_list": "cpp",
+        "list": "cpp",
+        "vector": "cpp",
+        "bitset": "cpp",
+        "iterator": "cpp",
+        "type_traits": "cpp"
+    }
+}

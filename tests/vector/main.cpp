@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <list>
+#include <forward_list>
 #include <iterator>
 #include <type_traits>
 #include "list.hpp"
@@ -22,50 +23,36 @@ std::ostream	&operator<<(std::ostream &os, std::vector<T> v)
 }
 
 
-class A{
-	public:
-		A(){
-			std::cout << "called" << std::endl;
-			val = new int();
-		};
-		A(const A &cp)
-		{
-	//		std::cout << "copy called" << std::endl;
-			val = new int();
-		}
-		A	&operator=(const A &rhs)
-		{
-			val = new int(*rhs.val);
-			std::cout << "assigment called" << std::endl;
-			return *this;
-		}
-		~A()
-		{
-			std::cout << "destuctor" << std::endl;
-			delete val;
-		}
-		int *val;
+namespace my{
+
+	struct	input_iterator_tag{}; // read only
+	struct	output_iterator_tag{}; // write only
+	struct	forward_iterator_tag : input_iterator_tag{}; // read write advance only
+	struct	bidirectional_iterator_tag : forward_iterator_tag {}; // added go boack --
+	struct 	random_access_iterator_tag : bidirectional_iterator_tag {}; // add [] operator
+
+	template <typename T> // T => iterator
+	struct iterator_traits{
+		typedef	typename	T::value_type			value_type;
+		typedef	typename	T::difference_type		difference_type;
+		typedef	typename	T::iterator_category	iterator_category;
+		typedef	typename	T::pointer				pointer;
+		typedef	typename	T::reference			reference;
+	};
 };
 
 
-template <typename Iter>
-typename std::enable_if <std::is_convertible<typename std::iterator_traits<Iter>::iterator_category, std::input_iterator_tag>::value>::type
-f(Iter beg, Iter end)
-{
-	for (; beg != end; ++beg)
-		std::cout << *beg << " ";
-	std::cout << std::endl;
-}
-
-void	 f(int val, int other) {
-	std::cout << "normal" << std::endl;
-}
-
+class A{
+	A() {
+	
+	}
+};
 
 int main()
 {
-	std::vector<int> h(1000000, 34);
+	std::vector<int> f(4);
 
-	h.push_back(45);
-	std::cout << h.capacity() << std::endl;
+	std::cout << f.capacity() << std::endl;
+	f.insert(f.begin(), 1, 2);
+	std::cout << f.capacity() << std::endl;
 }
