@@ -56,7 +56,6 @@ class	vector{
 		}
 		vector(vector const &cp)
 		{
-			_size = 0; // when = will used here inside =op will we size to detrmin weather to free or not
 			*this = cp;
 		}
 		explicit vector(const Allocator& alloc) : mem_manager(alloc)
@@ -122,13 +121,15 @@ class	vector{
 		{
 			if (count > _max_size)
 				throw std::length_error("invalid length");
-			if (count > _capacity){
-				range_destroy(0, _size, _capacity);
-				_capacity = count;
-				_arr = mem_manager.allocate(_capacity);
-			}
 			_index = count;
 			_size = count;
+			if (count > _capacity){
+				_capacity = count;
+				_size = count;
+				_index = count;
+				range_destroy(0, _size, _capacity);
+				_arr = mem_manager.allocate(_capacity);
+			}
 			for (int i = 0; i < _size; ++i)
 				_arr[i] = value;
 		}
@@ -139,13 +140,15 @@ class	vector{
 			count = last - first;
 			if (count > _max_size)
 				throw std::length_error("invalid length");
-			if (count > _capacity){
-				range_destroy(0, _size, _capacity);
-				_capacity = count;
-				_arr = mem_manager.allocate(_capacity);
-			}
 			_index = count;
 			_size = count;
+			if (count > _capacity){
+				_capacity = count;
+				_size = count;
+				_index = count;
+				range_destroy(0, _size, _capacity);
+				_arr = mem_manager.allocate(_capacity);
+			}
 			int i = 0;
 			for (; first != last; ++first) {
 				_arr[i] = *first;

@@ -16,7 +16,7 @@ std::ostream	&operator<< (std::ostream &os, ft::vector<T> &v)
 
 int main()
 {
-
-	int y;
-	std:: cin >> y;
+    ft::vector<std::string>    ft_v1(1e6, "string2");
+	ft::vector<std::string>    ft_v2(1e4, "string2");
+	ft_v2.assign(ft_v1.begin(), ft_v1.end());
 }
