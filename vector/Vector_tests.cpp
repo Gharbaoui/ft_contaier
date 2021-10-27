@@ -6,7 +6,7 @@
 /*   By: mamoussa <mamoussa@student.1337.ma>           +#+      +#++:      +#++:        +#+         */
 /*                                                    +#+         +#+        +#+      +#+           */
 /*   Created: 2021/07/10 19:43:45 by mamoussa        #+#  #+#    #+# #+#    #+#     #+#             */
-/*   Updated: 2021/10/24 15:58:51 by mel-ghar         ###   ########.fr       */
+/*   Updated: 2021/10/27 16:41:28 by mel-ghar         ###   ########.fr       */
 /*                                                                                                  */
 /* ************************************************************************************************ */
 
@@ -195,108 +195,8 @@ void    const_iterator_tests(void)
 	EQUAL(&(*my_it) != &(*tmp) && (&(*my_it) == &(*(my_v.begin()))));
     std::cout << "\033[1;36m\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\033[0m\n\n";
 }
-
-void    reverse_iterator_with_ft_vector(void)
-{
-    std::cout << "\033[1;36m<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< reverse_iterator with ft::vector >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\033[0m\n\n";
-    /*------------ std::reverse_iterator ---------*/
-    std::vector<int> v(3,4);
-    std::vector<int>::reverse_iterator rit(v.end()), rit_1(v.end() - 1);
-    /*----------------------------------*/
-    /*------------ ft::reverse_iterator ---------*/
-    ft::vector<int> my_v(3,4);
-    ft::vector<int>::reverse_iterator my_rit(my_v.end()), my_rit1(my_v.end() - 1);
-    /*----------------------------------*/
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " copy constructor " << "] --------------------]\t\t\033[0m";
-    {
-        ft::vector<int>::reverse_iterator ob(my_rit);
-        EQUAL(&(*my_rit) == &(*ob));
-    }
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " base function " << "] --------------------]\t\t\033[0m";
-    EQUAL((&(*rit) == &(*rit_1.base())) && (&(*my_rit) == &(*my_rit1.base())));
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " == operator " << "] --------------------]\t\t\033[0m";
-    EQUAL((rit == rit_1) == (my_rit == my_rit1));
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " != operator " << "] --------------------]\t\t\033[0m";
-    EQUAL((rit != rit_1) == (my_rit != my_rit1));
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " > operator " << "] --------------------]\t\t\033[0m";
-    EQUAL((rit > rit_1) == (my_rit > my_rit1));
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " >= operator " << "] --------------------]\t\t\033[0m";
-    EQUAL((rit >= rit_1) == (my_rit >= my_rit1));
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " < operator " << "] --------------------]\t\t\033[0m";
-    EQUAL((rit < rit_1) == (my_rit < my_rit1));
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " <= operator " << "] --------------------]\t\t\033[0m";
-    EQUAL((rit <= rit_1) == (my_rit <= my_rit1));
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " * operator " << "] --------------------]\t\t\033[0m";
-    EQUAL(((*my_rit == *(my_v.end() - 1)) && (&(*my_rit) == &(*(my_v.end() - 1))))
-    && ((*rit == *(v.end() - 1)) && (&(*rit) == &(*(v.end() - 1)))));
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " -> operator " << "] --------------------]\t\t\033[0m";
-    {
-        std::vector<std::string> v(3, "hello");
-        ft::vector<std::string> my_v(3, "hello");
-        std::vector<std::string>::reverse_iterator rit(v.end());
-        ft::vector<std::string>::reverse_iterator   my_rit(my_v.end());
-        EQUAL(rit->length() == my_rit->length());
-    }
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " - operator " << "] --------------------]\t\t\033[0m";
-	EQUAL((&(*my_rit) == &(*(my_rit1 - 1))) && (&(*rit) == &(*(rit_1 - 1))));
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " + operator " << "] --------------------]\t\t\033[0m";
-	EQUAL((&(*(my_rit + 1)) == &(*my_rit1)) && (&(*(rit + 1)) == &(*rit_1)));
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " += operator " << "] --------------------]\t\t\033[0m";
-	my_rit += 1;
-	rit += 1;
-	EQUAL((&(*my_rit) == &(*my_rit1)) && (&(*rit) == &(*rit_1)));
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " -= operator " << "] --------------------]\t\t\033[0m";
-	my_rit -= 1;
-	rit -= 1;
-	EQUAL((&(*my_rit) == &(*(my_rit1 - 1))) && (&(*rit) == &(*(rit_1 - 1))));
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " [] operator " << "] --------------------]\t\t\033[0m";
-	EQUAL((my_rit[0] = 5) == 5);
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " ++rit operator " << "] --------------------]\t\t\033[0m";
-    ++my_rit; // I incremented here to make sure that the object changes
-    ++rit;
-	EQUAL(&(*my_rit) == &(*my_rit1)) && (&(*rit) == &(*rit_1));
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " --rit operator " << "] --------------------]\t\t\033[0m";
-    --my_rit; // I incremented here to make sure that the object changes
-    --rit;
-	EQUAL((&(*my_rit) == &(*(my_rit1 - 1))) && (&(*rit) == &(*(rit_1 - 1))));
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " + operator (n + rit) " << "] --------------------]\t\t\033[0m";
-	EQUAL((&(*(2 + my_rit)) == &(*(1 + my_rit1))) && (&(*(2 + rit)) == &(*(1 + rit_1))));
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " - operator (rit1 - rit) " << "] --------------------]\t\t\033[0m";
-    EQUAL(((my_rit - my_rit1) == (rit - rit_1)) && ((my_rit1 - my_rit) == (rit_1 - rit)));
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " rit++ operator " << "] --------------------]\t\t\033[0m";
-    {
-        std::vector<int>::reverse_iterator   tmp(rit++);
-        ft::vector<int>::reverse_iterator    my_tmp(my_rit++);
-        EQUAL((&(*tmp) == &(*(--rit))) && (&(*my_tmp) == &(*(--my_rit))));
-    }
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " rit-- operator " << "] --------------------]\t\t\033[0m";
-    {
-        std::vector<int>::reverse_iterator   tmp(rit--);
-        ft::vector<int>::reverse_iterator    my_tmp(my_rit--);
-        EQUAL((&(*tmp) == &(*(++rit))) && (&(*my_tmp) == &(*(++my_rit))));
-    }
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " *rit++ test " << "] --------------------]\t\t\033[0m";
-    {
-        std::vector<char> v(10);
-        ft::vector<char> my_v(10);
-        std::string res, my_res;
-        std::vector<char>::reverse_iterator start(v.end()), end(v.begin());
-        ft::vector<char>::reverse_iterator 	my_start(my_v.end()), my_end(my_v.begin());
-        for(size_t i = 0; i < 10; ++i)
-            v[i] = '0' + i;
-		size_t i = 0;
-		for(ft::vector<char>::iterator it = my_v.begin(); it != my_v.end(); ++it)
-			*it = '0' + i++;
-        while (start != end)
-            res.push_back(*start++);
-        while (my_start != my_end)
-            my_res.push_back(*my_start++);
-        EQUAL(res == my_res);
-    }
-    std::cout << "\033[1;36m\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\033[0m\n\n";
-}
 #endif
-
+#if 0
 void vector_tests(void)
 {
     std::cout << "\033[1;36m<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< vector tests >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\033[0m\n\n";
@@ -1362,7 +1262,6 @@ void vector_tests(void)
         {
             time_t      start, end, diff;
             /*------------------ std::vectors ---------------------*/
-			std::cout << "reached" << std::endl;
             ft::vector<std::string>    ft_v1(1e6, "string2");
             // std::vector<std::string>    v1(1e6, "string2");
             std::vector<std::string>    v2(1e4, "string2");
@@ -1902,6 +1801,7 @@ void vector_tests(void)
         // /*---------------------------------------------------------------------------------------------------*/
         EQUAL(cond);
     }
+
     std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " insert method (range) " << "] --------------------]\t\t\033[0m";
     {
         /*-------------------------------------- time limit test -----------------------------------*/
@@ -3101,9 +3001,9 @@ void vector_tests(void)
         /*--------------------------------------------------------------------------------------------*/
         EQUAL(cond);
     }
-    std::cout << "\033[1;36m\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\033[0m\n\n";
+	std::cout << "\033[1;36m\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\033[0m\n\n";
 } // vec_end
-
+#endif
 void alarm_handler(int seg)
 {
     (void)seg;
@@ -3114,10 +3014,10 @@ void alarm_handler(int seg)
 int main(void)
 {
     signal(SIGALRM, alarm_handler);
-    iterator_tests();
+  	iterator_tests();
     const_iterator_tests();
     //reverse_iterator_tests();
-	//reverse_iterator_with_ft_vector();
-    vector_tests();
+//	reverse_iterator_with_ft_vector();
+  //  vector_tests();
     return 0;
 }

@@ -11,12 +11,48 @@ std::ostream	&operator<< (std::ostream &os, ft::vector<T> &v)
 	for (int i = 0; i < size; ++i){
 		os << v[i] << " ";
 	}
+	std::cout << "\nsize: " << size << " capacity: " << v.capacity() << std::endl;
 	return os;
 }
 
+template <typename T>
+std::ostream	&operator<< (std::ostream &os, std::vector<T> &v)
+{
+	int size = v.size();
+
+	for (int i = 0; i < size; ++i){
+		os << v[i] << " ";
+	}
+	std::cout << "\nsize: " << size << " capacity: " << v.capacity() << std::endl;
+	return os;
+}
+
+
+class MEM{
+	public:
+		MEM() {ptr = nullptr;}
+		MEM(const MEM &) {
+			ptr = new float();
+		}
+		MEM&	operator=(const MEM&)
+		{
+			if (!ptr)
+				ptr = new float();
+			return *this;
+		}
+		~MEM() {delete ptr;}
+	private:
+		float *ptr;
+};
+
+
 int main()
 {
-    ft::vector<std::string>    ft_v1(1e6, "string2");
-	ft::vector<std::string>    ft_v2(1e4, "string2");
-	ft_v2.assign(ft_v1.begin(), ft_v1.end());
+	ft::vector<int> g(12, 34);
+	ft::reverse_iterator<ft::vector<int>::iterator> k(g.rbegin());
+	ft::reverse_iterator<ft::vector<int>::const_iterator> l(g.rbegin());
+
+	std::reverse_iterator<std::vector<int>::iterator> mm;
+
+	std::cout << (l - k) << std::endl;
 }
