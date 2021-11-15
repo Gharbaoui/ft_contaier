@@ -1,38 +1,28 @@
 #include <iostream>
 #include <map>
-
-class A{
-	public:
-		A() {}
-		A(int h) : l(h) {}
-		int l;	
-};
+#include <vector>
+#include <utility>
+#include <memory>
 
 
-bool	operator>(const A &lhs, const A &rhs)
+template <typename T>
+class MyAllocator : public std::allocator<T>
 {
-	return lhs.l > rhs.l;
-}
+    public:
+        typedef size_t size_type;
+        typedef T* pointer;
+        typedef const T* const_pointer;
 
-
-template <typename T, typename Comp>
-class MAP
-{
-	public:
-		void	test()
-		{
-			std::cout << _cmp(arr[0], arr[1]) << std::endl;
-		}
-	private:
-		T arr[10];
-		Comp _cmp;
+        pointer allocate(size_type n)
+        {
+            std::cout << "good" << std::endl;
+            return std::allocator<T>::allocate(n);
+        }
 };
-
 
 int main()
 {
-	MAP<A, std::greater<A> > p;
+    std::vector<int, MyAllocator<int> > v(10);
 
-	p.test();
-
+    v.push_back(12);
 }

@@ -17,7 +17,7 @@ class map{
 		typedef	T													mapped_type;
 		typedef	ft::pair<const Key, T>								value_type;
 		typedef	size_t												size_type;
-		typedef	ptrdiff_t											difference_type;
+		typedef	std::ptrdiff_t										difference_type;
 		typedef	Compare												key_compare;
 		typedef	Allocator											allocator_type;
 		typedef	value_type&											reference;
@@ -39,12 +39,17 @@ class map{
 		// constructor
 		map() {}
 		explicit map(const Compare& comp, const Allocator& alloc = Allocator()) : _cmp(comp), _mem(alloc) {}
+
 		template< class InputIt >
 		map(InputIt first, InputIt last,
      		const Compare& comp = Compare(),
      		const Allocator& alloc = Allocator()) : _cmp(comp), _mem(alloc)
 		{
-
+            while (first != last)
+            {
+                _rb_tree.insert(*first);
+                ++first;
+            }
 		}
 	private:
 		allocator_type	_mem;

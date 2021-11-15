@@ -6,13 +6,7 @@
 
 int main()
 {
-	std::vector<std::pair<char, int> > _v(1, std::make_pair('l', 45));
+    std::vector<ft::pair<int, char> > _v(10);
 
-
-	std::map<char, int> _m(_v.begin(), _v.end());
-
-
-	for (int i = 0; i < 1; ++i)
-		std::cout << _m[i] << std::endl;
-
+    ft::map<int, char>  mp(_v.begin(), _v.end());
 }

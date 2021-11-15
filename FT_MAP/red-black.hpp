@@ -5,9 +5,6 @@
 template <typename Value_type, typename Comp, typename Alloc>
 class RB_tree{
 	public:
-		RB_tree() : root(NULL) {}
-		~RB_tree() {}
-	private:
 		struct	node
 		{
 			node() : left(NULL), right(NULL) , color(true) {}
@@ -17,8 +14,17 @@ class RB_tree{
 			Value_type	*parent;
 			bool		color; // true represent red false black
 		};
+		RB_tree() : root(NULL) {}
+        void    insert(const Value_type &new_item)
+        {
+            node    *n;
+        }
+		~RB_tree() {}
+	private:
 
 		node	*root;
+        Comp    _cmp;
+        Alloc   _mem;
 
 };
 
