@@ -20,9 +20,14 @@ class MyAllocator : public std::allocator<T>
         }
 };
 
+
 int main()
 {
-    std::vector<int, MyAllocator<int> > v(10);
 
-    v.push_back(12);
+    std::vector<std::pair<char, int> > _v(10, std::pair<char, int>('l', 12));
+
+    _v[0].first = 'k';
+    _v[9].second = 23;
+
+
 }
