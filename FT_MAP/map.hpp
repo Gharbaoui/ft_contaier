@@ -4,6 +4,9 @@
 #include  <stdexcept>
 #include "pair.hpp"
 #include "red-black.hpp"
+#include "../utils/iterator-traits/iterator-traits.hpp"
+#include "../utils/iterator-traits/map_iterator.hpp"
+
 namespace ft
 {
 
@@ -26,6 +29,7 @@ class map{
 		typedef	const value_type&									        const_reference;
 		typedef	RB_tree<value_type, key_compare, key_type, allocator_type>  red_black_tree;
         typedef typename red_black_tree::node                               RB_node;
+        typedef ft::rb_iterator<red_black_tree, key_compare>                       iterator;
 
 		class value_compare : public	ft::binary_function<value_type, value_type, bool>
 		{
@@ -80,6 +84,12 @@ class map{
                 tmp = _rb_tree.get_item(key);
             }
             return tmp->item.second;
+        }
+
+
+        iterator    begin()
+        {
+            return iterator(_rb_tree);
         }
 
 

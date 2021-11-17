@@ -44,15 +44,11 @@ int main()
     
     std::map<int, char> mp1(_v1.begin(), _v1.end());
     std::map<int, char> mp2(_v2.begin(), _v2.end());
-    std::cout << "MAP1" << std::endl;
-    map_display(mp1);
-    std::cout << std::endl << "MAP2" << std::endl;
-    map_display(mp2);
 
     
+    std::map<int, char>::iterator itr(mp1.begin());
 
-    std::cout << "after assigment" << std::endl;
 
-    mp2 = mp1;
-    map_display(mp2);
+    ++itr;
+
 }

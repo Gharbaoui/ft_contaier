@@ -5,12 +5,17 @@
 template <typename Value_type, typename Key_compare, typename key_type, typename Alloc>
 class RB_tree{
 	public:
+        typedef Value_type  value_type;
 		RB_tree() : root(NULL)  {}
+		~RB_tree() {}
 		struct	node
 		{
 			node() : left(NULL), right(NULL) , color(true) {}
 			node(const Value_type &itm) : item(itm), left(NULL), right(NULL) , color(true) {}
-		
+		    node(const node &cp)
+                : item(cp.item), left(cp.left), right(cp.right)
+                ,parent(cp.parent), color(cp.color) {}
+
         	Value_type	item;
 			node        *left;
 			node        *right;
@@ -44,7 +49,6 @@ class RB_tree{
             return get_item_help(key, root);
         }
 
-
         void    rb_delete(const Value_type &v)
         {
             node *n = find_help(v, root);
@@ -68,8 +72,7 @@ class RB_tree{
             else
                 std::cout << "non found" << std::endl;
         }
-		~RB_tree() {}
-       void   clear_all() {
+        void   clear_all() {
             delete_all(root);
             root = NULL;
         }

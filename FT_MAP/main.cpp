@@ -22,6 +22,5 @@ int main()
     std::cout << std::endl;
     ft::map<int, char>  mp(_v.begin(), _v.end());
 
-    std::cout << mp[90] << std::endl;
-
+    ft::map<int, char>::iterator itr(mp.begin());
 }
