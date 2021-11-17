@@ -20,14 +20,39 @@ class MyAllocator : public std::allocator<T>
         }
 };
 
+void    map_display(const std::map<int, char> &mp)
+{
+    for (auto itr = mp.begin(); itr != mp.end(); ++itr)
+       std::cout << itr->first << ": " << itr->second << std::endl;
+}
 
 int main()
 {
+    int size1 = 10;
+    std::vector<std::pair<int, char> > _v1;
+    srand(time (NULL));
 
-    std::vector<std::pair<char, int> > _v(10, std::pair<char, int>('l', 12));
+    for (int i = 0; i < size1; ++i)
+        _v1.push_back(std::pair<int, char>(rand() % 1000, 32 + rand() % 50));
+    int size2 = 10;
 
-    _v[0].first = 'k';
-    _v[9].second = 23;
+    std::vector<std::pair<int, char> > _v2;
+    srand(time (NULL) * time(NULL));
 
+    for (int i = 0; i < size2; ++i)
+        _v2.push_back(std::pair<int, char>(rand() % 1000, 32 + rand() % 50));
+    
+    std::map<int, char> mp1(_v1.begin(), _v1.end());
+    std::map<int, char> mp2(_v2.begin(), _v2.end());
+    std::cout << "MAP1" << std::endl;
+    map_display(mp1);
+    std::cout << std::endl << "MAP2" << std::endl;
+    map_display(mp2);
 
+    
+
+    std::cout << "after assigment" << std::endl;
+
+    mp2 = mp1;
+    map_display(mp2);
 }
