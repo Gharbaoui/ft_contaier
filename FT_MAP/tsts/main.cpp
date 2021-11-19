@@ -28,27 +28,15 @@ void    map_display(const std::map<int, char> &mp)
 
 int main()
 {
-    int size1 = 10;
-    std::vector<std::pair<int, char> > _v1;
-    srand(time (NULL));
+    std::vector<std::pair<int, char> > _v;
 
-    for (int i = 0; i < size1; ++i)
-        _v1.push_back(std::pair<int, char>(rand() % 1000, 32 + rand() % 50));
-    int size2 = 10;
+    _v.push_back(std::pair<int, char>(12, 'l'));
 
-    std::vector<std::pair<int, char> > _v2;
-    srand(time (NULL) * time(NULL));
+    std::map<int, char> mp1(_v.begin(), _v.end());
+    std::map<int, char> mp2(_v.begin(), _v.end());
 
-    for (int i = 0; i < size2; ++i)
-        _v2.push_back(std::pair<int, char>(rand() % 1000, 32 + rand() % 50));
-    
-    std::map<int, char> mp1(_v1.begin(), _v1.end());
-    std::map<int, char> mp2(_v2.begin(), _v2.end());
+    std::map<int, char>::iterator it1(mp1.begin());
+    std::map<int, char>::iterator it2(mp1.begin());
 
-    
-    std::map<int, char>::iterator itr(mp1.begin());
-
-
-    ++itr;
-
+    std::cout << (it1 == it2) << std::endl;
 }

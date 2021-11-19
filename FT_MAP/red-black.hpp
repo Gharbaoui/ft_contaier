@@ -6,7 +6,7 @@ template <typename Value_type, typename Key_compare, typename key_type, typename
 class RB_tree{
 	public:
         typedef Value_type  value_type;
-		RB_tree() : root(NULL)  {}
+		RB_tree() : root(NULL) , current(NULL) , last_node(NULL) {}
 		~RB_tree() {}
 		struct	node
 		{
@@ -22,6 +22,7 @@ class RB_tree{
 			node        *parent;
 			bool		color; // true represent red false black
 		};
+
         void    insert(const Value_type &new_item)
         {
             node *n;
@@ -34,13 +35,16 @@ class RB_tree{
                 insert_help(n, root);
                 if (n->parent->color)
                     solve_color_violation(n);
+                last_node = get_last_node(root);
             }
             else
             {
                 root = n;
                 n->color = false;
                 n->parent = NULL;
+                last_node = root;
             }
+            current = get_first_node(root);
             root->color = false;
         }
         
@@ -72,11 +76,54 @@ class RB_tree{
             else
                 std::cout << "non found" << std::endl;
         }
+
         void   clear_all() {
             delete_all(root);
             root = NULL;
         }
+    
+    // start to make interface for iterator
+    
+    Value_type  &operator*()
+    {
+        return current->item;
+    }
+
+    Value_type  *operator->()
+    {
+        return &current->item;
+    }
+
+    void    operator++()
+    {
+        current = successor(current);
+    }
+
+    void    operator--()
+    {
+        current = predecessor(current);
+    }
+
+    bool    operator==(const RB_tree &rhs)
+    {
+        return current == rhs.current;
+    }
+    
 	private:
+        node    *get_last_node(node *n)
+        {
+            while (n->right)
+                n = n->right;
+            return n;
+        }
+
+        node    *get_first_node(node *n)
+        {
+            while (n->left)
+                n = n->left;
+            return n;
+        }
+
         void    insert_help(node *n, node *head)
         {
             if (node_compare(n, head))
@@ -149,7 +196,7 @@ class RB_tree{
                 }
                 else
                 {
-                    if (right_of(p->parent, p))
+                    if (p->parent && right_of(p->parent, p))
                     {
                         if (left_of(p, tmp))
                         {
@@ -174,6 +221,7 @@ class RB_tree{
                     break ;
                 }
             }
+            root->color = ft::black;
         }
 
         bool    node_compare(node *n1, node *n2)
@@ -542,6 +590,7 @@ class RB_tree{
             put_in_my_place(n);
             delete n;
         }
+
         void    delete_all(node *head)
         {
             if (!head)
@@ -552,6 +601,8 @@ class RB_tree{
         }
     private:
 		node	*root;
+        node    *last_node;
+        node    *current;
         Key_compare    _cmp;
         typename Alloc::template rebind<node>::other _node_alloc;
 
