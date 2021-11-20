@@ -7,22 +7,19 @@
 
 int main()
 {
-    int size = 10;
-    std::vector<ft::pair<int, char> > _vp;
-    std::vector<int> _keys{3505, 3681, 1046, 1707, 4148, 4901, 284, 237, 776, 4416};
-    
-    srand(time(NULL));
-    for (int i = 0; i < size; ++i)
-    {
-        _vp.push_back(ft::make_pair(_keys[i], 32 + rand() % 50));
-        std::cout << _vp[i].first << ", ";
-    }
-    std::cout << std::endl;
-    ft::map<int, char> mp(_vp.begin(), _vp.end());
+    std::vector <std::pair<int, char> > _v;
+
+    _v.push_back(std::make_pair(1, 'l'));
+    _v.push_back(std::make_pair(2, 'g'));
+    _v.push_back(std::make_pair(3, 'f'));
+
+    std::map<int, char> mp(_v.begin(), _v.end());
+
+    std::map<int, char>::iterator ib(mp.begin());
 
 
-   mp.remove_intr(284); 
-
-
+    --ib;
+    ++ib;
+    std::cout << ib->first << std::endl;
 
 }

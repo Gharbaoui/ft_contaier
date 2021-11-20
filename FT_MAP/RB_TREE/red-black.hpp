@@ -84,6 +84,8 @@ namespace   ft
         }
 
         RB_node *predecessor() {return RB_node::predecessor(this);}
+
+        ITEM_TYPE   &get_item() const {return item;}
     };
 
     template <typename value_type, typename key_compare, typename key_type, typename alloc>
@@ -123,6 +125,7 @@ namespace   ft
                 if (n)
                     remove_node_help(n , root);
             }
+
             int bh()
             {
                 int h;
@@ -131,6 +134,7 @@ namespace   ft
                     --h;
                 return h;
             }
+
             int black_height(node *n)
             {
                 int lh, rh;
@@ -144,38 +148,25 @@ namespace   ft
                     return lh + !n->color;
                 }
             }
-
-            // remove this section
-    
-            void    display()
+            node    *tree_min(node *n)
             {
-                int h;
-                if (root) {
-                 traversal(root);
-                h = black_height(root);
-                if (!root->color)
-                    --h;
-
-                std::cout << "black height: " << h << std::endl;
+                if (n)
+                {
+                    while (n->left)
+                        n = n->left;
                 }
-                else
-                    std::cout << "non found" << std::endl;
+                return n;
             }
 
-        void    traversal(node *n)
-        {
-            if (n->left)
-                traversal(n->left);
-            if (!n->color)
-                std::cout << "\033[0;30;107m";
-            else
-                std::cout << "\033[1;31;49m";
-            std::cout << n->item.first << ": " << n->item.second << " color: " << n->color << std::endl;
-            std::cout << "\033[0;39;49m";
-            if (n->right)
-                traversal(n->right);
-        }
-
+            node    *tree_max(node *n)
+            {
+                if (n)
+                {
+                    while (n->right)
+                        n = n->right;
+                }
+                return n;
+            }
 
         private:
             node    *BST_delete(node *n)
@@ -218,7 +209,7 @@ namespace   ft
                         niece = niece_of(tmp);
                         if (get_color(sb) == ft::black) // black sibling
                         {
-                            if (get_color(neph))
+                            if (get_color(neph) == ft::red)
                             {
                                 sb->color = tmp->parent->color;
                                 tmp->parent->color = ft::black;
@@ -226,7 +217,7 @@ namespace   ft
                                 rotate_sibling_to_parent(tmp->parent, sb);
                                 break ;
                             }
-                            else if (get_color(niece))
+                            else if (get_color(niece) == ft::red)
                             {
                                 niece->color = ft::black;
                                 sb->color = ft::red;
@@ -544,7 +535,6 @@ namespace   ft
                 }
                 root->color = ft::black;
             }
-
         private:
             key_compare _cmp;
             node        *root;

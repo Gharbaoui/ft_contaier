@@ -5,6 +5,7 @@
 #include "pair.hpp"
 #include "./RB_TREE/red-black.hpp"
 #include "../utils/iterator-traits/iterator-traits.hpp"
+#include "../utils/iterator-traits/map_iterator.hpp"
 
 namespace ft
 {
@@ -27,7 +28,7 @@ class map{
 		typedef	value_type&											        reference;
 		typedef	const value_type&									        const_reference;
         typedef RB_manager<value_type, key_compare, key_type, allocator_type>   rb_tree;
-
+        typedef rb_iterator<value_type>                                      iterator;
 		class value_compare : public	ft::binary_function<value_type, value_type, bool>
 		{
             friend class map;
@@ -58,15 +59,8 @@ class map{
                 _rb_tree.insert(*first);
                 ++first;
             }
-            _rb_tree.display();
 		}
-        void    remove_intr(key_type k)
-        {
-            _rb_tree.remove_node(k);
-            std::cout << std::endl;
-            _rb_tree.display();
-            
-        }
+
         allocator_type get_allocator() const {return _mem;}
 
 
