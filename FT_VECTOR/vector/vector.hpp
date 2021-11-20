@@ -5,10 +5,10 @@
 
 #include <memory>
 #include <stdexcept>
-#include "../helper/simple.hpp"
-#include "../helper/is-integral.hpp"
-#include "../iterator-traits/iterator-traits.hpp"
-#include "../iterator-traits/iterators.hpp"
+#include "../../utils/helper/simple.hpp"
+#include "../../utils/helper/is-integral.hpp"
+#include "../../utils/iterator-traits/iterator-traits.hpp"
+#include "../../utils/iterator-traits/iterators.hpp"
 
 namespace ft{
 
