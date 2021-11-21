@@ -2,7 +2,9 @@
 #define MAP_HPP
 
 #include  <stdexcept>
+#include <type_traits>
 #include "pair.hpp"
+#include "../utils/helper/simple.hpp"
 #include "./RB_TREE/red-black.hpp"
 #include "../utils/iterator-traits/iterator-traits.hpp"
 #include "../utils/iterator-traits/map_iterator.hpp"
@@ -18,17 +20,21 @@ template<
 >
 class map{
 	public:
-		typedef	Key													        key_type;
-		typedef	T													        mapped_type;
-		typedef	ft::pair<const Key, T>								        value_type;
-		typedef	size_t												        size_type;
-		typedef	std::ptrdiff_t										        difference_type;
-		typedef	Compare												        key_compare;
-		typedef	Allocator											        allocator_type;
-		typedef	value_type&											        reference;
-		typedef	const value_type&									        const_reference;
-        typedef RB_manager<value_type, key_compare, key_type, allocator_type>   rb_tree;
-        typedef rb_iterator<value_type>                                      iterator;
+		typedef	Key																				key_type;
+		typedef	T																				mapped_type;
+		typedef	ft::pair<const Key, T>															value_type;
+		typedef	ft::pair<const Key, const T>													const_value_type;
+		typedef	size_t																			size_type;
+		typedef	std::ptrdiff_t																	difference_type;
+		typedef	Compare																			key_compare;
+		typedef	Allocator																		allocator_type;
+		typedef	value_type&																		reference;
+		typedef	const value_type&																const_reference;
+        typedef RB_manager<value_type, key_compare, key_type, allocator_type>					rb_tree;
+        typedef rb_iterator<value_type, value_type&, value_type*, allocator_type>				iterator;
+        typedef rb_iterator<value_type, value_type const&, value_type const*, allocator_type>	const_iterator;
+
+
 		class value_compare : public	ft::binary_function<value_type, value_type, bool>
 		{
             friend class map;
@@ -59,10 +65,32 @@ class map{
                 _rb_tree.insert(*first);
                 ++first;
             }
+
+			ft::pair<key_type, T> m(*first);
 		}
 
         allocator_type get_allocator() const {return _mem;}
 
+		// iterator functions
+		iterator	begin()
+		{
+			return iterator(_rb_tree.left_most(), _rb_tree.get_last_node());
+		}
+
+		iterator	end()
+		{
+			return iterator(_rb_tree.get_last_node(), _rb_tree.get_last_node(), _rb_tree.right_most());
+		}
+		
+		const_iterator	begin() const
+		{
+			return const_iterator(_rb_tree.left_most(), _rb_tree.get_last_node());
+		}
+
+		const_iterator	end() const
+		{
+			return const_iterator(_rb_tree.get_last_node(), _rb_tree.get_last_node(), _rb_tree.right_most());
+		}
 
 	private:
 		allocator_type	_mem;

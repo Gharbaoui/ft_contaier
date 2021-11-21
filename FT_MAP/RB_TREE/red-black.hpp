@@ -22,6 +22,7 @@ namespace   ft
             color = red;
             left = right = NULL;
         }
+
         ITEM_TYPE   item;
         node_color  color;
         RB_node     *left;
@@ -46,7 +47,9 @@ namespace   ft
                     tmp  = n->parent;
                     if (tmp && tmp->left == n)
                         return tmp;
-                    while (tmp && tmp->parent->right == tmp)
+					if (!tmp->parent)
+						return NULL;
+                    while (tmp->parent && tmp->parent->right == tmp)
                         tmp = tmp->parent;
                     if (tmp)
                         tmp = tmp->parent;
@@ -74,7 +77,9 @@ namespace   ft
                     tmp = n->parent;
                     if (tmp && tmp->right == n)
                         return tmp;
-                    while (tmp && tmp->parent->left == tmp)
+					if (!tmp->parent)
+						return NULL;
+                    while (tmp->parent && tmp->parent->left == tmp)
                         tmp = tmp->parent;
                     if (tmp)
                         tmp = tmp->parent;
@@ -85,7 +90,7 @@ namespace   ft
 
         RB_node *predecessor() {return RB_node::predecessor(this);}
 
-        ITEM_TYPE   &get_item() const {return item;}
+        ITEM_TYPE   &get_item() {return item;}
     };
 
     template <typename value_type, typename key_compare, typename key_type, typename alloc>
@@ -94,7 +99,9 @@ namespace   ft
         public:
             typedef RB_node<value_type>    node;
 
-            RB_manager() : root(NULL) {}
+            RB_manager() : root(NULL) {
+				last_node = _n_alloc.allocate(1);
+			}
 
             node    *insert(const value_type &v)
             {
@@ -118,6 +125,11 @@ namespace   ft
                 }
                 return n;
             }
+
+			node*	get_last_node()
+			{
+				return last_node;
+			}
             
             void    remove_node(const key_type &k)
             {
@@ -148,7 +160,8 @@ namespace   ft
                     return lh + !n->color;
                 }
             }
-            node    *tree_min(node *n)
+
+            node    *left_most(node *n)
             {
                 if (n)
                 {
@@ -157,8 +170,13 @@ namespace   ft
                 }
                 return n;
             }
+			
+			node	*left_most()
+			{
+				return left_most(root);
+			}
 
-            node    *tree_max(node *n)
+            node    *right_most(node *n)
             {
                 if (n)
                 {
@@ -167,6 +185,10 @@ namespace   ft
                 }
                 return n;
             }
+			node	*right_most()
+			{
+				return right_most(root);
+			}
 
         private:
             node    *BST_delete(node *n)
@@ -538,6 +560,7 @@ namespace   ft
         private:
             key_compare _cmp;
             node        *root;
+			node		*last_node;
             typename alloc::template rebind<node>::other    _n_alloc;
             
     };

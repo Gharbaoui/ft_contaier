@@ -355,7 +355,7 @@ class RB_tree{
                     tmp = n->parent;
                     if (tmp && left_of(tmp, n))
                         return tmp;
-                    while (tmp && right_of(tmp->parent, tmp))
+                    while (tmp->parent && right_of(tmp->parent, tmp))
                         tmp = tmp->parent;
                     if (tmp)
                         tmp = tmp->parent;
@@ -381,7 +381,7 @@ class RB_tree{
                     tmp = n->parent;
                     if (tmp && right_of(tmp, n))
                         return tmp;
-                    while (tmp && left_of(tmp->parent, tmp))
+                    while (tmp->parent && left_of(tmp->parent, tmp))
                         tmp = tmp->parent;
                     if (tmp)
                         tmp = tmp->parent;

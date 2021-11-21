@@ -26,17 +26,25 @@ void    map_display(const std::map<int, char> &mp)
        std::cout << itr->first << ": " << itr->second << std::endl;
 }
 
+struct Base{};
+
+struct A : public Base{
+	int x;
+};
+
+
+
 int main()
 {
-    std::vector<std::pair<int, char> > _v;
+	std::vector<std::pair<int, char> > _v;
+	_v.push_back(std::make_pair(1, 'k'));
+	_v.push_back(std::make_pair(4, 'k'));
+	_v.push_back(std::make_pair(3, 'k'));
 
-    _v.push_back(std::pair<int, char>(12, 'l'));
+	std::map<int, char> mp(_v.begin(), _v.end());
 
-    std::map<int, char> mp1(_v.begin(), _v.end());
-    std::map<int, char> mp2(_v.begin(), _v.end());
+	std::map<int, char>::const_iterator ib(mp.begin());
 
-    std::map<int, char>::iterator it1(mp1.begin());
-    std::map<int, char>::iterator it2(mp1.begin());
-
-    std::cout << (it1 == it2) << std::endl;
+	ib->second = 'G';
+	std::cout << ib->second << std::endl;
 }

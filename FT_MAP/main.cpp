@@ -5,21 +5,29 @@
 #include "map.hpp"
 #include <stdlib.h>
 
+
 int main()
 {
-    std::vector <std::pair<int, char> > _v;
+	int size = 200;
 
-    _v.push_back(std::make_pair(1, 'l'));
-    _v.push_back(std::make_pair(2, 'g'));
-    _v.push_back(std::make_pair(3, 'f'));
+    std::vector <ft::pair<int, char> > _v/*{ft::make_pair(5, 'h'), ft::make_pair(7, 'k'), ft::make_pair(0, 'h'), ft::make_pair(1, 'k'), ft::make_pair(3, 'h'), ft::make_pair(55, 'k'), ft::make_pair(9, 'h'), ft::make_pair(8, 'k'), ft::make_pair(87, 'k')}*/;
 
-    std::map<int, char> mp(_v.begin(), _v.end());
+	srand(time(NULL));
+	for (int i = 0; i < size; ++i)
+	{
+		int v = rand() % 1000;
+		_v.push_back(ft::make_pair(v, 32 + rand() % 55));
+		std::cout << v << ", ";
+	}
 
-    std::map<int, char>::iterator ib(mp.begin());
+	std::cout << std::endl;
 
 
-    --ib;
-    ++ib;
-    std::cout << ib->first << std::endl;
+	ft::map<int, char> mp(_v.begin(), _v.end());
 
+
+	ft::map<int, char>::iterator i(mp.begin());
+
+	for (; i != mp.end(); ++i)	
+		std::cout << i->first  << ": " << i->second << std::endl;
 }
