@@ -33,6 +33,7 @@ class map{
         typedef RB_manager<value_type, key_compare, key_type, allocator_type>					rb_tree;
         typedef rb_iterator<value_type, value_type&, value_type*, allocator_type>				iterator;
         typedef rb_iterator<value_type, value_type const&, value_type const*, allocator_type>	const_iterator;
+		typedef	ft::reverse_iterator<iterator>													reverse_iterator;
 
 
 		class value_compare : public	ft::binary_function<value_type, value_type, bool>
@@ -74,7 +75,7 @@ class map{
 		// iterator functions
 		iterator	begin()
 		{
-			return iterator(_rb_tree.left_most(), _rb_tree.get_last_node());
+			return iterator(_rb_tree.left_most(), _rb_tree.get_last_node(), _rb_tree.right_most());
 		}
 
 		iterator	end()
@@ -90,6 +91,12 @@ class map{
 		const_iterator	end() const
 		{
 			return const_iterator(_rb_tree.get_last_node(), _rb_tree.get_last_node(), _rb_tree.right_most());
+		}
+
+
+		reverse_iterator	rend()
+		{
+			return reverse_iterator(iterator(_rb_tree.get_last_node(), _rb_tree.get_last_node(), _rb_tree.left_most()));
 		}
 
 	private:

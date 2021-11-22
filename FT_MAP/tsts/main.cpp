@@ -38,13 +38,18 @@ int main()
 {
 	std::vector<std::pair<int, char> > _v;
 	_v.push_back(std::make_pair(1, 'k'));
-	_v.push_back(std::make_pair(4, 'k'));
 	_v.push_back(std::make_pair(3, 'k'));
+	_v.push_back(std::make_pair(6, 'm'));
 
 	std::map<int, char> mp(_v.begin(), _v.end());
 
-	std::map<int, char>::const_iterator ib(mp.begin());
+	std::map<int, char>::iterator itr(mp.begin());
 
-	ib->second = 'G';
-	std::cout << ib->second << std::endl;
+	itr++;
+	itr++;
+	std::cout << itr->first << std::endl;
+	itr++;
+	itr++;
+	itr--;
+	std::cout << itr->first << std::endl;
 }
