@@ -34,6 +34,7 @@ class map{
         typedef rb_iterator<value_type, value_type&, value_type*, allocator_type>				iterator;
         typedef rb_iterator<value_type, value_type const&, value_type const*, allocator_type>	const_iterator;
 		typedef	ft::reverse_iterator<iterator>													reverse_iterator;
+		typedef	ft::reverse_iterator<const_iterator>									        const_reverse_iterator;
 
 
 		class value_compare : public	ft::binary_function<value_type, value_type, bool>
@@ -94,10 +95,25 @@ class map{
 		}
 
 
-		reverse_iterator	rend()
-		{
-			return reverse_iterator(iterator(_rb_tree.get_last_node(), _rb_tree.get_last_node(), _rb_tree.left_most()));
-		}
+        reverse_iterator    rbegin()
+        {
+            return reverse_iterator(end());
+        }
+
+        reverse_iterator    rend()
+        {
+            return reverse_iterator(begin());
+        }
+
+        const_reverse_iterator  rbegin() const
+        {
+            return const_reverse_iterator(begin());
+        }
+
+        const_reverse_iterator  rend() const
+        {
+            return const_reverse_iterator(end());
+        }
 
 	private:
 		allocator_type	_mem;

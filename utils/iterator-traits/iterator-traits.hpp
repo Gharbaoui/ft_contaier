@@ -43,6 +43,18 @@ namespace ft
 			typename ft::iterator_traits<Iter_Type>::value_type
 		>::value;
 	};
+
+    template <typename T>
+    struct p_to_const{
+        static const  bool value = false;
+    };
+
+    template <typename T>
+    struct p_to_const<const T *>
+    {
+        static const bool value = true;
+    };
+    
 };
 
 #endif

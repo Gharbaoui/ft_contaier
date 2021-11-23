@@ -41,15 +41,8 @@ int main()
 	_v.push_back(std::make_pair(3, 'k'));
 	_v.push_back(std::make_pair(6, 'm'));
 
-	std::map<int, char> mp(_v.begin(), _v.end());
 
-	std::map<int, char>::iterator itr(mp.begin());
+    std::map<int, char> mp(_v.begin(), _v.end());
 
-	itr++;
-	itr++;
-	std::cout << itr->first << std::endl;
-	itr++;
-	itr++;
-	itr--;
-	std::cout << itr->first << std::endl;
+    std::map<int, char>::reverse_iterator it;
 }

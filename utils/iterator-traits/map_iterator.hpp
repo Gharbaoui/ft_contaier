@@ -49,11 +49,28 @@ class rb_iterator{
 
 		rb_iterator&	operator++()
 		{
+            if (current == last_node)
+            {
+                current = NULL;
+            }
+            else if (current)
+            {
+                current = current->successor();
+                if (!current)
+                    current = last_node;
+            }
 			return *this;
 		}
 
 		rb_iterator&	operator--()
 		{
+            if (current == last_node)
+            {
+                current = most_node;
+            } else if (current)
+            {
+                current = current->predecessor();
+            }
 			return *this;
 		}
 
@@ -74,6 +91,7 @@ class rb_iterator{
 		bool	operator==(const rb_iterator &rhs) {return current == rhs.current;}
 		bool	operator!=(const rb_iterator &rhs) {return current != rhs.current;}
 
+        node    *get_current() const {return current;}
 	private:
         node		*current;
 		node		*last_node;
@@ -81,7 +99,6 @@ class rb_iterator{
 		typename Alloc::template rebind<node>::other		_alloc;
         
 };
-
 
 template <typename ITER>
 class	reverse_iterator{
@@ -93,22 +110,39 @@ class	reverse_iterator{
 		typedef	typename ft::iterator_traits<ITER>::reference			reference;
 		typedef	typename ft::iterator_traits<ITER>::pointer				pointer;
 
-		reverse_iterator() : current() {}
-		reverse_iterator(const iterator_type &itr) : current(itr) {}
+		reverse_iterator() : current_itr() {}
+		reverse_iterator(const iterator_type &itr) : current_itr(itr) {}
 
-		reference	operator*() const {return *current;}
+		reference	operator*() const {
+            iterator_type tmp(current_itr);
+            --tmp;
+            return *tmp;
+        }
+
+        pointer operator->() const {
+            return &(operator*());
+        }
+
 		reverse_iterator&	operator++()
 		{
-			--current;
+            --current_itr;
 			return *this;
 		}
+
 		reverse_iterator&	operator--()
 		{
-			++current;
+			++current_itr;
 			return *this;
 		}
+		
+        bool	operator==(const reverse_iterator &rhs)
+        {return current_itr == rhs.current_it;}
+        
+		bool	operator!=(const reverse_iterator &rhs)
+        {return current_itr != rhs.current_itr;}
+        
 	private:
-		iterator_type	current;
+		iterator_type	current_itr;
 };
 }
 #endif
