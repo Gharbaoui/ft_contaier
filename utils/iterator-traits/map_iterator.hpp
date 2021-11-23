@@ -6,8 +6,6 @@ namespace ft
 
 template <typename VT, typename RFER, typename POINTER, typename Alloc>
 class rb_iterator{
-	private:
-		typedef	rb_iterator<VT, VT const &, VT const *, Alloc>	const_iterator;
     public:
         typedef VT                              value_type;
         typedef std::ptrdiff_t                  difference_type;
@@ -27,6 +25,19 @@ class rb_iterator{
         rb_iterator(const rb_iterator &cp) :
 		current(cp.current) , last_node(cp.last_node), most_node (cp.most_node) {}
 		
+		template <typename R1, typename P1>
+		rb_iterator(const rb_iterator<VT, R1, P1, Alloc> &iter)
+		{
+			// if P1 is pointer to const below function
+			// is formed
+			// if not it's ill-formed and it will fail to compile
+			// this will allow from iter =? to const iter
+			// and from const iter => iter
+			help_constr_iter_to_const_iter<P1>();
+			current = iter.get_current();
+			last_node = iter.get_last_node();
+			most_node = iter.get_most_node();
+		}
 		rb_iterator&	operator=(const rb_iterator &rhs)
 		{
 			if (this != &rhs)
@@ -36,11 +47,6 @@ class rb_iterator{
 				most_node = rhs.most_node;
 			}
 			return *this;
-		}
-
-		operator const_iterator()
-		{
-			return const_iterator(current, last_node, most_node);
 		}
 
         reference operator*() const {return current->get_item();}
@@ -88,17 +94,38 @@ class rb_iterator{
 			return tmp;
 		}
 
-		bool	operator==(const rb_iterator &rhs) {return current == rhs.current;}
-		bool	operator!=(const rb_iterator &rhs) {return current != rhs.current;}
-
         node    *get_current() const {return current;}
+        node    *get_last_node() const {return last_node;}
+        node    *get_most_node() const {return most_node;}
 	private:
         node		*current;
 		node		*last_node;
 		node		*most_node;
 		typename Alloc::template rebind<node>::other		_alloc;
+
+	private:
+		template <typename T>
+		void	help_constr_iter_to_const_iter(
+		typename ft::enable_if<!ft::p_to_const<T>::value>::type=false		
+		)
+		{
+			// this function does nothing
+			// but magic in one he use it
+		}
         
 };
+
+template <typename VT, typename R1, typename R2, typename P1, typename P2, typename Al>
+bool	operator==(const rb_iterator<VT, R1, P1, Al> &lhs, const rb_iterator<VT, R2, P2, Al> &rhs)
+{
+	return lhs.get_current() == rhs.get_current();
+}
+
+template <typename VT, typename R1, typename R2, typename P1, typename P2, typename Al>
+bool	operator!=(const rb_iterator<VT, R1, P1, Al> &lhs, const rb_iterator<VT, R2, P2, Al> &rhs)
+{
+	return lhs.get_current() != rhs.get_current();
+}
 
 template <typename ITER>
 class	reverse_iterator{
@@ -112,7 +139,17 @@ class	reverse_iterator{
 
 		reverse_iterator() : current_itr() {}
 		reverse_iterator(const iterator_type &itr) : current_itr(itr) {}
+		reverse_iterator(const reverse_iterator &riter) : current_itr(riter.current_itr) {}
+		reverse_iterator &operator=(const reverse_iterator &rhs)
+		{
+			if (this != &rhs)
+				current_itr = rhs.current_itr;
+			return *this;
+		}
+		template <typename CITER>
+		reverse_iterator(const reverse_iterator<CITER> &citr) : current_itr(citr.base()) {}
 
+		iterator_type	base() const {return   current_itr;}
 		reference	operator*() const {
             iterator_type tmp(current_itr);
             --tmp;
@@ -134,15 +171,35 @@ class	reverse_iterator{
 			++current_itr;
 			return *this;
 		}
-		
-        bool	operator==(const reverse_iterator &rhs)
-        {return current_itr == rhs.current_it;}
-        
-		bool	operator!=(const reverse_iterator &rhs)
-        {return current_itr != rhs.current_itr;}
-        
+
+		reverse_iterator	operator--(int)
+		{
+			reverse_iterator tmp(*this);
+			operator--();
+			return tmp;
+		}
+
+		reverse_iterator	operator++(int)
+		{
+			reverse_iterator tmp(*this);
+			operator++();
+			return tmp;
+		}
 	private:
 		iterator_type	current_itr;
 };
+
+template <typename LITER, typename RITER>
+bool	operator==(const ft::reverse_iterator<LITER> &lhs, const ft::reverse_iterator<RITER> &rhs)
+{
+	return lhs.base() == rhs.base();
+}
+
+template <typename LITER, typename RITER>
+bool	operator!=(const ft::reverse_iterator<LITER> &lhs, const ft::reverse_iterator<RITER> &rhs)
+{
+	return lhs.base() != rhs.base();
+}
+
 }
 #endif
