@@ -126,7 +126,7 @@ bool	operator!=(const rb_iterator<VT, R1, P1, Al> &lhs, const rb_iterator<VT, R2
 {
 	return lhs.get_current() != rhs.get_current();
 }
-
+/*
 template <typename ITER>
 class	reverse_iterator{
 	public:
@@ -199,7 +199,7 @@ template <typename LITER, typename RITER>
 bool	operator!=(const ft::reverse_iterator<LITER> &lhs, const ft::reverse_iterator<RITER> &rhs)
 {
 	return lhs.base() != rhs.base();
-}
+}*/
 
 }
 #endif

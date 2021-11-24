@@ -544,25 +544,6 @@ bool operator!=( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs 
 	return !(rhs == lhs);
 }
 
-template <typename Iter1, typename Iter2>
-bool	lexicographical_compare(Iter1 f1, Iter1 l1, Iter2 f2, Iter2 l2) // if elment in range 1 is less than elment in range 2 (true) if range1 is done before range 2 (true) if not false
-{
-	while (f1 != l1)
-	{
-		if (f2 == l2) // second has done
-			return false;
-		else if (*f1 < *f2)
-			return true;
-		else if (*f2 < *f1)  // doing 2 comap bec == does not count to one of them
-			return false;
-		++f1;
-		++f2;
-	}
-	if (f2 == l2) // if second range done and we are reached here return false
-		return false;
-	return true;
-}
-
 template< class T, class Alloc >
 bool operator<(const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 {

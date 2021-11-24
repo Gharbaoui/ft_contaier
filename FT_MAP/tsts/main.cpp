@@ -36,13 +36,11 @@ struct A : public Base{
 
 int main()
 {
-	std::vector<std::pair<int, char> > _v;
-	_v.push_back(std::make_pair(1, 'k'));
-	_v.push_back(std::make_pair(3, 'k'));
-	_v.push_back(std::make_pair(6, 'm'));
+	std::map<int, char> p;
+
+	p[2] = 'h';
+
+	std::cout << p[2] << std::endl;
 
 
-    std::map<int, char> mp(_v.begin(), _v.end());
-
-    std::map<int, char>::reverse_iterator it;
 }

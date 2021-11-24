@@ -1,6 +1,7 @@
 #ifndef ITERATOR_TRAITS
 #define ITERATOR_TRAITS
-
+#include <type_traits>
+#include <iterator>
 namespace ft
 {
 	template <typename Iter>

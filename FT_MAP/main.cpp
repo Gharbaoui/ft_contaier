@@ -1,48 +1,66 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <unistd.h>
 #include <map>
 #include "map.hpp"
 
 
+#include <vector>
+#include <unistd.h>
+#include <iostream>
+#include <iterator>
+#include <utility>
+#include <ctime>
+#include <iomanip>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/time.h>
+#include <random>
+
 int main()
 {
-	std::vector<ft::pair<int, char> > _v1;
-	_v1.push_back(ft::make_pair(1, 'e'));
-	_v1.push_back(ft::make_pair(2, 'f'));
+	bool cond;
+        {
+			std::map<int, std::string> m3;
+			ft::map<int, std::string> ft_m3;
 
-	std::vector<ft::pair<int, char> > _v2;
-	_v2.push_back(ft::make_pair(3, 'E'));
-	_v2.push_back(ft::make_pair(4, 'F'));
+			std::vector<int> vec;
+			std::vector<int> ft_vec;
 
-/*	ft::map<int, char> mp1(_v1.begin(), _v1.end());
-	ft::map<int, char> mp2(_v2.begin(), _v2.end());
+			std::random_device randDev;
+			std::mt19937 generator(randDev());
+			std::uniform_int_distribution<int> distr(0, 1e8);
 
-	mp1.swap(mp2);
-	ft::map<int, char>::iterator i1b(mp1.begin());
-	ft::map<int, char>::iterator i1e(mp1.end());
+			for (size_t i = 0; i < 10; i++)
+			{
+				m3.insert(std::make_pair(i, "string1"));
+				ft_m3.insert(ft::make_pair(i, "string1"));
+			}
 
+			for (size_t i = 0; i < 10; ++i)
+			{
+				int n = distr(generator);
+				int ret1 = m3.erase(n);
+				int ret2 = ft_m3.erase(n);
 
-	ft::map<int, char>::iterator i2b(mp2.begin());
-	ft::map<int, char>::iterator i2e(mp2.end());
+				if (ret1 != ret2)
+				{
+					std::cout << "got inside" << std::endl;
+					cond = false;
+					break;
+				}
+			}
 
-
-	std::cout << "map 1" << std::endl;
-	for (; i1b != i1e; ++i1b)
-		std::cout << i1b->first << ": " << i1b->second << std::endl;
-	std::cout << "map 2" << std::endl;
-	for (; i2b != i2e; ++i2b)
-		std::cout << i2b->first << ": " << i2b->second << std::endl;
-
-
-	std::cout << mp2.count(2) << std::endl;*/
-
-	ft::map<int, char> const m1(_v1.begin(), _v1.end());
-	ft::map<int, char>::const_iterator i = m1.find(2);
-
-
-	std::cout << i->first << ": " << i->second << std::endl;
-
-
-
+			if (!m3.empty())
+			{
+				m3.erase(m3.begin(), m3.end());
+				m3.erase(m3.begin(), m3.end());
+			}
+			if (!ft_m3.empty())
+			{
+				ft_m3.erase(ft_m3.begin(), ft_m3.end());
+				ft_m3.erase(ft_m3.begin(), ft_m3.end());
+			}
+        }
 }

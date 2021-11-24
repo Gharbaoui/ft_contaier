@@ -12,7 +12,7 @@ namespace   ft
     template <typename ITEM_TYPE>
     struct   RB_node
     {
-        RB_node() {
+        RB_node() : item() {
             color = red;
             left = NULL;
             right = NULL;
@@ -145,14 +145,35 @@ namespace   ft
                 return n;
             }
 
+			value_type	&insert_with_no_find(const value_type &v)
+			{
+                node *n;
+				++size;
+                n = _n_alloc.allocate(1);
+                _n_alloc.construct(n, v);
+                if (root)
+                {
+                    normal_insert(n, root, v.first);
+                    if (n->parent->color == ft::red)
+                        solve_color_violation(n);
+                }
+                else
+                {
+                    root = n;
+                    n->parent = NULL;
+                    n->color = black;
+                }
+				return n->item;
+			}
+
 			void	swap_rb_manager(RB_manager &other)
 			{
-				ft::swap(size, other.size);
-				ft::swap(root, other.root);
-				ft::swap(last_node, other.last_node);
-				ft::swap(last_node, other.last_node);
-				ft::swap(_cmp, other._cmp);
-				ft::swap(_n_alloc, other._n_alloc);
+				std::swap(size, other.size);
+				std::swap(root, other.root);
+				std::swap(last_node, other.last_node);
+				std::swap(last_node, other.last_node);
+				std::swap(_cmp, other._cmp);
+				std::swap(_n_alloc, other._n_alloc);
 			}
 			
 			node*	get_last_node() const
@@ -160,22 +181,20 @@ namespace   ft
 				return last_node;
 			}
 
-			node *lower_bound(const key_type& key) const
-			{
-				// working here
-			}
-
-            void    remove_node(const key_type &k, node *cn=NULL)
+            int    remove_node(const key_type &k, node *cn=NULL)
             {
+				int i(0); // if node with k exist i becoms 1
 				node *n;
 				if (!cn)
                 	n = find(k, root);
 				else
 					n = cn;
                 if (n) {
+					i = 1;
                     remove_node_help(n , root);
 					--size;
 				}
+				return i;
             }
 
             int bh()
@@ -315,8 +334,8 @@ namespace   ft
                 if (tmp)
                     tmp->color = ft::black;
                 put_in_my_place(n);
-               _n_alloc.deallocate(n, 1);
                 _n_alloc.destroy(n);
+               _n_alloc.deallocate(n, 1);
             }
         // helper functions
             // insert help

@@ -2,12 +2,12 @@
 #define MAP_HPP
 
 #include  <stdexcept>
-#include <type_traits>
 #include  <utility>
 #include "pair.hpp"
 #include "../utils/helper/simple.hpp"
 #include "./RB_TREE/red-black.hpp"
 #include "../utils/iterator-traits/iterator-traits.hpp"
+#include "../utils/iterator-traits/iterators.hpp"
 #include "../utils/iterator-traits/map_iterator.hpp"
 
 namespace ft
@@ -54,10 +54,10 @@ class map{
 		};
 
 		// constructor
-		map() : def() {}
-        ~map () {}
+		map() : def(), _rb_tree() {}
+        ~map () {clear();}
 		explicit map(const Compare& comp, const Allocator& alloc = Allocator())
-        : _cmp(comp), _mem(alloc), def() {}
+        : _cmp(comp), _mem(alloc), def(), _rb_tree() {}
 
 		template< class InputIt >
 		map(InputIt first, InputIt last,
@@ -70,6 +70,22 @@ class map{
                 _rb_tree.insert(*first, was_here);
                 ++first;
             }
+		}
+		
+		map(const map &cp)
+		{
+			insert(cp.begin(), cp.end());
+		}
+
+		map& operator=(const map& other)
+		{
+			if (this != &other)
+			{
+				if (size())
+					clear();
+				insert(other.begin(), other.end());
+			}
+			return *this;
 		}
 
         allocator_type get_allocator() const {return _mem;}
@@ -125,7 +141,8 @@ class map{
 			node *n = _rb_tree.find(k);
 			if (n)
 				return n->item.second;
-			return def;
+			else
+				return _rb_tree.insert_with_no_find(ft::make_pair(k, def)).second;
 		}
 		T& at( const Key& key )
 		{
@@ -176,8 +193,7 @@ class map{
 
 		size_type erase (const key_type& k)
 		{
-			_rb_tree.remove_node(k);
-			return 1;
+			return _rb_tree.remove_node(k);
 		}
 
 		void erase (iterator first, iterator last)
@@ -196,7 +212,8 @@ class map{
 
 		void clear()
 		{
-			erase(begin(), end());
+			if (size())
+				erase(begin(), end());
 		}
 
 		void swap( map& other )
@@ -228,7 +245,107 @@ class map{
 
 		iterator lower_bound(const Key& key)
 		{
-			// stops here
+			// return iterator to obj that has key
+			// and if not found return what comes after next
+			// and if key is bigger than last elm I return last_node which is mine
+			iterator _beg(begin());
+			iterator _end(end());
+
+			while (_beg != _end)
+			{
+				if (!_cmp(_beg->first, key))
+					break ;
+				++_beg;
+			}
+			return _beg;
+		}
+
+		const_iterator lower_bound( const Key& key ) const
+		{
+			const_iterator _beg(begin());
+			const_iterator _end(end());
+
+			while (_beg != _end)
+			{
+				if (!_cmp(_beg->first, key))
+					break ;
+				++_beg;
+			}
+			return _beg;
+		}
+
+		iterator upper_bound( const Key& key )
+		{
+			// return iterator to first greater elm after key
+			//so this to be true iter->first should be greater than key
+			iterator _beg(begin());
+			iterator _end(end());
+			while (_beg != _end)
+			{
+				if (_cmp(key, _beg->first))
+					break ;
+				++_beg;
+			}
+			return _beg;
+		}
+
+		const_iterator upper_bound( const Key& key ) const
+		{
+			// return iterator to first greater elm after key
+			//so this to be true iter->first should be greater than key
+			const_iterator _beg(begin());
+			const_iterator _end(end());
+			while (_beg != _end)
+			{
+				if (_cmp(key, _beg->first))
+					break ;
+				++_beg;
+			}
+			return _beg;
+		}
+		
+		key_compare key_comp() const
+		{
+			return _cmp;
+		}
+
+		value_compare value_comp() const
+		{
+			return value_compare(_cmp);
+		}
+		
+		ft::pair<iterator,iterator> equal_range(const Key& key)
+		{
+			iterator _beg(begin());
+			iterator _end(end());
+
+			while (_beg != _end)
+			{
+				if (!_cmp(_beg->first, key))
+					break ;
+				++_beg;
+			}
+			_end = _beg;
+			if (_beg->first == key)
+				++_end;
+			return ft::make_pair(_beg, _end);
+		}
+
+		ft::pair<const_iterator,const_iterator> equal_range(const Key& key) const
+		{
+			const_iterator _beg(begin());
+			const_iterator _end(end());
+
+			while (_beg != _end)
+			{
+				if (!_cmp(_beg->first, key))
+					break ;
+				++_beg;
+			}
+			_end = _beg;
+			if (_beg->first == key)
+				++_end;
+			return ft::make_pair(_beg, _end);
 		}
 
 	private:
@@ -238,6 +355,50 @@ class map{
         rb_tree         _rb_tree;
 
 };
+template< class Key, class T, class Compare, class Alloc >
+void swap(ft::map<Key,T,Compare,Alloc>& lhs, ft::map<Key,T,Compare,Alloc>& rhs)
+{
+	lhs.swap(rhs);
+}
+
+template< class Key, class T, class Compare, class Alloc >
+bool operator==(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs)
+{
+
+	if (lhs.size() == rhs.size())
+		return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+	return false;
+}
+
+template< class Key, class T, class Compare, class Alloc >
+bool operator!=( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
+{
+	return !(lhs == rhs);
+}
+
+template< class Key, class T, class Compare, class Alloc >
+bool operator<(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs)
+{
+	return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+}
+
+template< class Key, class T, class Compare, class Alloc >
+bool operator>(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs)
+{
+	return rhs < lhs;
+}
+
+template< class Key, class T, class Compare, class Alloc >
+bool operator<=(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs)
+{
+	return !(rhs < lhs);
+}
+
+template< class Key, class T, class Compare, class Alloc >
+bool operator>=(const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs)
+{
+	return !(lhs < rhs);
+}
 
 };
 
