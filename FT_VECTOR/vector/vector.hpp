@@ -108,7 +108,7 @@ class	vector{
 				_capacity = rhs._capacity;
 				mem_manager = rhs.mem_manager;
 				_arr = mem_manager.allocate(_capacity);
-				for (int i = 0; i < _size; ++i)
+				for (size_t i = 0; i < _size; ++i)
 					mem_manager.construct(_arr + i, rhs._arr[i]);
 			}
 			return *this;
@@ -125,7 +125,7 @@ class	vector{
 				_arr = mem_manager.allocate(_capacity);
 			}
 			_size = count;
-			for (int i = 0; i < _size; ++i){
+			for (size_t i = 0; i < _size; ++i){
 				if (not_constructed)
 					mem_manager.construct(_arr + i, value);
 				else
@@ -221,7 +221,7 @@ class	vector{
 				throw std::length_error("invalid length");
 			if (_capacity < new_cap){
 				new_arr = mem_manager.allocate(new_cap);
-				for (int i = 0; i < _size; ++i)
+				for (size_t i = 0; i < _size; ++i)
 					mem_manager.construct(new_arr + i , _arr[i]);
 		//		for (int i = _size; i < new_cap; ++i)
 		//			mem_manager.construct(new_arr + i);
@@ -247,7 +247,7 @@ class	vector{
 		//modifiers
 		void			clear()
 		{
-			for (int i = 0; i < _size;  ++i)
+			for (size_t i = 0; i < _size;  ++i)
 				mem_manager.destroy(_arr + i);
 			_size = 0;
 		}
@@ -299,7 +299,7 @@ class	vector{
 		iterator erase(iterator where) {
 			size_type pos = &(*where) - _arr;
 			if (pos < _size) {
-				for (int i = pos; i < _size - 1; ++i)
+				for (size_t i = pos; i < _size - 1; ++i)
 					_arr[i] = _arr[i + 1];
 				--_size;
 			}
@@ -315,7 +315,7 @@ class	vector{
 			{
 				pos = &(*last) - _arr;
 				if (pos <= _size) {
-					for (int i = pos; i < _size; ++i)
+					for (size_t i = pos; i < _size; ++i)
 						_arr[i - count] = _arr[i];
 					_size -= count;
 				}
@@ -339,7 +339,7 @@ class	vector{
 				else
 			   		_capacity *= 2;
 				new_arr = mem_manager.allocate(_capacity);
-				int i;
+				size_t i;
 				for (i = 0; i < _size; ++i)
 					mem_manager.construct(new_arr + i, _arr[i]);
 				mem_manager.construct(new_arr + i, val);
@@ -371,7 +371,7 @@ class	vector{
 						--n;
 					}
 				}else {
-					for (int i = _size; i < count + 1; ++i)
+					for (size_t i = _size; i < count + 1; ++i)
 						mem_manager.construct(_arr + i, value);
 				}
 			}else{
@@ -381,9 +381,9 @@ class	vector{
 				else
 					_capacity = count;
 				new_arr = mem_manager.allocate(_capacity);
-				for (int i = 0; i < _size; ++i)
+				for (size_t i = 0; i < _size; ++i)
 					mem_manager.construct(new_arr + i, _arr[i]);
-				for (int i = _size; i < _capacity; ++i)
+				for (size_t i = _size; i < _capacity; ++i)
 					mem_manager.construct(new_arr + i, value);
 				range_destroy(0, _size, cur_cap);
 				_arr = new_arr;
@@ -406,7 +406,7 @@ class	vector{
 						--n;
 					}
 				}else {
-					for (int i = _size; i < count + 1; ++i)
+					for (size_t i = _size; i < count + 1; ++i)
 						mem_manager.construct(_arr + i);
 				}
 			}else{
@@ -416,9 +416,9 @@ class	vector{
 				else
 					_capacity = count;
 				new_arr = mem_manager.allocate(_capacity);
-				for (int i = 0; i < _size; ++i)
+				for (size_t i = 0; i < _size; ++i)
 					mem_manager.construct(new_arr + i, _arr[i]);
-				for (int i = _size; i < _capacity; ++i)
+				for (size_t i = _size; i < _capacity; ++i)
 					mem_manager.construct(new_arr + i);
 				range_destroy(0, _size, cur_cap);
 				_arr = new_arr;
@@ -509,17 +509,17 @@ class	vector{
 				else
 					_capacity *= 2;
 				_new_arr = mem_manager.allocate(_capacity);
-				for (int i = 0; (i < _size && i < start_of_gap); ++i)
+				for (size_t i = 0; (i < _size && i < start_of_gap); ++i)
 					mem_manager.construct(_new_arr + i, _arr[i]);
 				if (start_of_gap < _size)
-					for (int i = _size - 1; i >= start_of_gap; --i)
+					for (size_t i = _size - 1; i >= start_of_gap; --i)
 						mem_manager.construct(_new_arr + (i + gap_size) , _arr[i]);
 				range_destroy(0, _size, cur_cap);
 				_arr = _new_arr;
 			}
 			if (!already_in_place) {
 				if (start_of_gap < _size)
-					for (int i = _size - 1; i >= start_of_gap; --i)
+					for (size_t i = _size - 1; i >= start_of_gap; --i)
 						mem_manager.construct(_arr + (i + gap_size), _arr[i]);
 			}
 		}
@@ -528,10 +528,10 @@ class	vector{
 template< class T, class Alloc > 
 bool operator==( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs )
 {
-	int size = lhs.size();
+	size_t size = lhs.size();
 	if (size != rhs.size())
 		return false;
-	for (int i = 0; i < size; ++i) {
+	for (size_t i = 0; i < size; ++i) {
 		if (lhs[i] != rhs[i])
 			return false;
 	}

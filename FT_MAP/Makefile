@@ -1,2 +1,4 @@
-out: main.cpp pair.hpp map.hpp ./RB_TREE/red-black.hpp ../utils/iterator-traits/map_iterator.hpp
-	clang++  -std=c++11  main.cpp -o out
+out:
+	clang++ -Wall -Werror -Wextra -std=c++11  Map_tests.cpp -o out
+clean:
+	rm -rf out
