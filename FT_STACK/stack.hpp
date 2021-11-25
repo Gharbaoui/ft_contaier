@@ -1,0 +1,4 @@
+template<
+    class T,
+    class Container = std::deque<T>
+> class stack;

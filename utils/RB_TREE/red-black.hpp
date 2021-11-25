@@ -12,7 +12,7 @@ namespace   ft
     template <typename ITEM_TYPE>
     struct   RB_node
     {
-        RB_node() {
+        RB_node() : item() {
             color = red;
             left = NULL;
             right = NULL;
@@ -112,9 +112,11 @@ namespace   ft
         public:
             typedef RB_node<value_type>    node;
 
-            RB_manager() : root(NULL), size(0) {
+            RB_manager() : size(0), root(NULL) {
 				last_node = _n_alloc.allocate(1);
 			}
+
+			~RB_manager() {_n_alloc.deallocate(last_node, 1);}
 
             node    *insert(const value_type &v, bool &was_here, node *head=NULL)
             {
@@ -145,14 +147,35 @@ namespace   ft
                 return n;
             }
 
+			value_type	&insert_with_no_find(const value_type &v)
+			{
+                node *n;
+				++size;
+                n = _n_alloc.allocate(1);
+                _n_alloc.construct(n, v);
+                if (root)
+                {
+                    normal_insert(n, root, v.first);
+                    if (n->parent->color == ft::red)
+                        solve_color_violation(n);
+                }
+                else
+                {
+                    root = n;
+                    n->parent = NULL;
+                    n->color = black;
+                }
+				return n->item;
+			}
+
 			void	swap_rb_manager(RB_manager &other)
 			{
-				ft::swap(size, other.size);
-				ft::swap(root, other.root);
-				ft::swap(last_node, other.last_node);
-				ft::swap(last_node, other.last_node);
-				ft::swap(_cmp, other._cmp);
-				ft::swap(_n_alloc, other._n_alloc);
+				std::swap(size, other.size);
+				std::swap(root, other.root);
+				std::swap(last_node, other.last_node);
+				std::swap(last_node, other.last_node);
+				std::swap(_cmp, other._cmp);
+				std::swap(_n_alloc, other._n_alloc);
 			}
 			
 			node*	get_last_node() const
@@ -160,22 +183,20 @@ namespace   ft
 				return last_node;
 			}
 
-			node *lower_bound(const key_type& key) const
-			{
-				// working here
-			}
-
-            void    remove_node(const key_type &k, node *cn=NULL)
+            int    remove_node(const key_type &k, node *cn=NULL)
             {
+				int i(0); // if node with k exist i becoms 1
 				node *n;
 				if (!cn)
                 	n = find(k, root);
 				else
 					n = cn;
                 if (n) {
-                    remove_node_help(n , root);
+					i = 1;
+                    remove_node_help(n);
 					--size;
 				}
+				return i;
             }
 
             int bh()
@@ -265,7 +286,7 @@ namespace   ft
             }
             
         
-            void    remove_node_help(node *n, node *head)
+            void    remove_node_help(node *n)
             {
                 node *tmp;
                 node *sb, *neph, *niece;
@@ -315,8 +336,8 @@ namespace   ft
                 if (tmp)
                     tmp->color = ft::black;
                 put_in_my_place(n);
-               _n_alloc.deallocate(n, 1);
                 _n_alloc.destroy(n);
+               _n_alloc.deallocate(n, 1);
             }
         // helper functions
             // insert help

@@ -17,8 +17,9 @@ class rb_iterator{
 
         // constructors
         rb_iterator() : current(NULL) {
-			last_node = _alloc.allocate(1);
+			last_node = NULL;
 		}
+
         rb_iterator(node *n, node *last_n, node *right_m) :
 		current(n) , last_node(last_n), most_node(right_m) {}
 
