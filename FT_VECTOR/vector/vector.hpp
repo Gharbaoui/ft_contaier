@@ -80,7 +80,7 @@ class	vector{
 		vector(InputIt first, InputIt last,
        	const Allocator& alloc = Allocator(),
 		typename ft::enable_if<!ft::is_integral<InputIt>::value>::type=true
-		)
+		) : mem_manager(alloc)
 		{
 			_max_size = mem_manager.max_size();
 			_capacity = last - first;

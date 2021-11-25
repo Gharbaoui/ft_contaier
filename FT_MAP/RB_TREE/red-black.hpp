@@ -112,7 +112,7 @@ namespace   ft
         public:
             typedef RB_node<value_type>    node;
 
-            RB_manager() : root(NULL), size(0) {
+            RB_manager() : size(0), root(NULL) {
 				last_node = _n_alloc.allocate(1);
 			}
 
@@ -191,7 +191,7 @@ namespace   ft
 					n = cn;
                 if (n) {
 					i = 1;
-                    remove_node_help(n , root);
+                    remove_node_help(n);
 					--size;
 				}
 				return i;
@@ -284,7 +284,7 @@ namespace   ft
             }
             
         
-            void    remove_node_help(node *n, node *head)
+            void    remove_node_help(node *n)
             {
                 node *tmp;
                 node *sb, *neph, *niece;

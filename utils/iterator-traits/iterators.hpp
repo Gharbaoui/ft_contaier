@@ -166,9 +166,8 @@ namespace ft
 				return tmp;
 			}
 			reference				operator[](difference_type n) const {
-				int a = *(current - 1);
 				iterator_type tmp(current - (n + 1));
-				return *tmp; // return lmenr
+				return *tmp;
 			}
 			reverse_iterator	operator+(difference_type n) const
 			{

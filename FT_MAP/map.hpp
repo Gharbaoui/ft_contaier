@@ -57,7 +57,7 @@ class map{
 		map() : def(), _rb_tree() {}
         ~map () {clear();}
 		explicit map(const Compare& comp, const Allocator& alloc = Allocator())
-        : _cmp(comp), _mem(alloc), def(), _rb_tree() {}
+        : def(), _mem(alloc), _cmp(comp), _rb_tree() {}
 
 		template< class InputIt >
 		map(InputIt first, InputIt last,
@@ -170,6 +170,7 @@ class map{
 		iterator insert(iterator hint, const value_type& value)
 		{
 			bool was;
+			(void)hint;
 			node *cu = _rb_tree.insert(value, was);
 			return iterator(cu, _rb_tree.get_last_node(), _rb_tree.right_most());
 
