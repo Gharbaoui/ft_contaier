@@ -337,7 +337,7 @@ class map{
 		{
 			const_iterator _beg(begin());
 			const_iterator _end(end());
-
+            Key k;
 			while (_beg != _end)
 			{
 				if (!_cmp(_beg->first, key))
@@ -345,7 +345,8 @@ class map{
 				++_beg;
 			}
 			_end = _beg;
-			if (_beg->first == key)
+            k = _beg->first; // start of change
+			if (!_cmp(k, key) && !_cmp(key, k)) // check for // assigment // end of change
 				++_end;
 			return ft::make_pair(_beg, _end);
 		}

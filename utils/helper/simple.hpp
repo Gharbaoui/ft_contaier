@@ -22,6 +22,26 @@ namespace ft{
 		return true;
 	}
 
+    template <class InputIterator1, class InputIterator2, class Compare>
+    bool lexicographical_compare
+    (InputIterator1 f1, InputIterator1 l1, InputIterator2 f2, InputIterator2 l2, Compare comp)
+    {
+        while (f1 != l1)
+        {
+            if (f2 == l2)
+                return false;
+            else if (comp(*f1, *f2))
+                return true;
+            else if (comp(*f2, *f1))
+                return false;
+            ++f1;
+            ++f2;
+        }
+        if (f2 == l2)
+            return false;
+        return true;
+    }
+
 
 	template <bool, typename=bool>
 	struct enable_if{};
