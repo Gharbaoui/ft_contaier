@@ -280,6 +280,7 @@ class set{
 		{
 			iterator _beg(begin());
 			iterator _end(end());
+			Key k;
 
 			while (_beg != _end)
 			{
@@ -288,7 +289,8 @@ class set{
 				++_beg;
 			}
 			_end = _beg;
-			if (*_beg == key)
+			k = *_beg;
+			if (!_cmp(k, key) && !_cmp(key, k))
 				++_end;
 			return ft::make_pair(_beg, _end);
 		}
@@ -297,6 +299,7 @@ class set{
 		{
 			const_iterator _beg(begin());
 			const_iterator _end(end());
+			Key k;
 
 			while (_beg != _end)
 			{
@@ -305,7 +308,8 @@ class set{
 				++_beg;
 			}
 			_end = _beg;
-			if (*_beg == key)
+			k = *_beg;
+			if (!_cmp(k, key) && !_cmp(key, k))
 				++_end;
 			return ft::make_pair(_beg, _end);
 		}
@@ -341,7 +345,7 @@ bool operator!=( const ft::set<Key,Compare,Alloc>& lhs, const ft::set<Key,Compar
 template< class Key,  class Compare, class Alloc >
 bool operator<(const ft::set<Key, Compare,Alloc>& lhs, const ft::set<Key,Compare,Alloc>& rhs)
 {
-	return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+	return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end(), Compare());
 }
 
 template< class Key,  class Compare, class Alloc >

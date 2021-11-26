@@ -320,6 +320,7 @@ class map{
 		{
 			iterator _beg(begin());
 			iterator _end(end());
+            Key k;
 
 			while (_beg != _end)
 			{
@@ -328,7 +329,8 @@ class map{
 				++_beg;
 			}
 			_end = _beg;
-			if (_beg->first == key)
+			k = _beg->first;
+			if (!_cmp(k, key) && !_cmp(key, k))
 				++_end;
 			return ft::make_pair(_beg, _end);
 		}
@@ -338,6 +340,7 @@ class map{
 			const_iterator _beg(begin());
 			const_iterator _end(end());
             Key k;
+
 			while (_beg != _end)
 			{
 				if (!_cmp(_beg->first, key))

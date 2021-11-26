@@ -2265,8 +2265,5 @@ int main()
     std::cout << YELLOW << "Testing Non-Member Swap  ; " << RESET << std::endl;
     TEST_CASE(testNonMemberSwap);
     std::cout << std::endl;
-
-	std::cout << "test for leak now" << std::endl;
-	read(0, NULL, 1);
     return 0;
 }

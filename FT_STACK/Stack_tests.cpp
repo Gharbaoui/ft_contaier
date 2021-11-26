@@ -6,7 +6,7 @@
 /*   By: mamoussa <mamoussa@student.1337.ma>           +#+      +#++:      +#++:        +#+         */
 /*                                                    +#+         +#+        +#+      +#+           */
 /*   Created: 2021/10/12 12:45:02 by mamoussa        #+#  #+#    #+# #+#    #+#     #+#             */
-/*   Updated: 2021/11/25 10:26:58 by mel-ghar         ###   ########.fr       */
+/*   Updated: 2021/11/26 06:54:38 by mel-ghar         ###   ########.fr       */
 /*                                                                                                  */
 /* ************************************************************************************************ */
 
@@ -302,6 +302,20 @@ void	testRelationalOperators(void)
 		}
 		{
 			vec.push_back(300);
+			if (n->left)
+			{
+				n = n->left;
+				while (n->right)
+					n = n->right;
+				return n;
+			}
+			RB_node *tmp(n->parent);
+			while (tmp && tmp->left == n)
+			{
+				n = tmp;
+				tmp = tmp->parent;
+			}
+            return tmp;
 			ft::stack<int, std::vector<int> > mystack1(vec);
 			ft::stack<int, std::vector<int> > mystack(vec1);
 			std::stack<int, std::vector<int> > stack1(vec);
@@ -342,8 +356,5 @@ int main()
     std::cout << YELLOW << "Testing relational operators;" << RESET << std::endl;
     TEST_CASE(testRelationalOperators);
 
-	std::cout << "Leak Test" << std::endl;
-	int y;
-	std::cin >> y;
 	return 0;
 }

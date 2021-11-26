@@ -44,60 +44,39 @@ namespace   ft
 
         static  RB_node *successor(RB_node *n)
         {
-            RB_node *tmp;
-
-            tmp = NULL;
-            if (n)
-            {
-                if (n->right)
-                {
-                    tmp  = n->right;
-                    while (tmp->left)
-                        tmp = tmp->left;
-                }
-                else if (n->parent)
-                {
-                    tmp  = n->parent;
-                    if (tmp && tmp->left == n)
-                        return tmp;
-					if (!tmp->parent)
-						return NULL;
-                    while (tmp->parent && tmp->parent->right == tmp)
-                        tmp = tmp->parent;
-                    if (tmp)
-                        tmp = tmp->parent;
-                }
-            }
-            return tmp;
+			if (n->right)
+			{
+				n = n->right;
+				while (n->left)
+					n = n->left;
+				return n;
+			}
+			RB_node *tmp(n->parent);
+			while (tmp && n == tmp->right)
+			{
+				n = tmp;
+				tmp = tmp->parent;
+			}
+			return tmp;
         }
 
         RB_node  *successor() {return RB_node::successor(this);}
 
         static RB_node  *predecessor(RB_node *n)
         {
-            RB_node *tmp;
-
-            tmp = NULL;
-            if (n)
-            {
-                if (n->left)
-                {
-                    tmp = n->left;
-                    while (tmp->right)
-                        tmp = tmp->right;
-                }else if (n->parent)
-                {
-                    tmp = n->parent;
-                    if (tmp && tmp->right == n)
-                        return tmp;
-					if (!tmp->parent)
-						return NULL;
-                    while (tmp->parent && tmp->parent->left == tmp)
-                        tmp = tmp->parent;
-                    if (tmp)
-                        tmp = tmp->parent;
-                }
-            }
+			if (n->left)
+			{
+				n = n->left;
+				while (n->right)
+					n = n->right;
+				return n;
+			}
+			RB_node *tmp(n->parent);
+			while (tmp && tmp->left == n)
+			{
+				n = tmp;
+				tmp = tmp->parent;
+			}
             return tmp;
         }
 
@@ -347,10 +326,10 @@ namespace   ft
                 {
                     if (_cmp(key, head->item.first))
                         head = head->left;
-                    else if (key == head->item.first)
-                        return head;
-                    else
+                    else if (_cmp(head->item.first, key))
                         head = head->right;
+					else
+                        return head;
                 }
                 return head;
             }
