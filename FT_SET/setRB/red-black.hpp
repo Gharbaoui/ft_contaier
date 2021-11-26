@@ -243,6 +243,44 @@ namespace   ft
 				return find(k, root);
 			}
 
+
+			node	*lower_bound(const key_type &k) const
+			{
+				node *n = this->root;
+				node *tmp(last_node);
+
+				while (n)
+				{
+					// in order to get in this if
+					// n->item.first is equal or bigger than k
+					if (!_cmp(n->item, k))
+					{
+						tmp = n;
+						n = n->left;
+					}
+					else
+						n = n->right;
+				}
+				return tmp;
+			}
+
+			node	*upper_bound(const key_type &k) const
+			{
+				node *n = this->root;
+				node *tmp(last_node);
+
+				while (n)
+				{
+					if (_cmp(k, n->item))
+					{
+						tmp = n;
+						n = n->left;
+					}
+					else
+						n = n->right;
+				}
+				return tmp;
+			}
         private:
             node    *BST_delete(node *n)
             {

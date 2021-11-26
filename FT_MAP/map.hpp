@@ -250,60 +250,22 @@ class map{
 			// return iterator to obj that has key
 			// and if not found return what comes after next
 			// and if key is bigger than last elm I return last_node which is mine
-			iterator _beg(begin());
-			iterator _end(end());
-
-			while (_beg != _end)
-			{
-				if (!_cmp(_beg->first, key))
-					break ;
-				++_beg;
-			}
-			return _beg;
+			return iterator(_rb_tree.lower_bound(key), _rb_tree.get_last_node(), _rb_tree.right_most());
 		}
 
 		const_iterator lower_bound( const Key& key ) const
 		{
-			const_iterator _beg(begin());
-			const_iterator _end(end());
-
-			while (_beg != _end)
-			{
-				if (!_cmp(_beg->first, key))
-					break ;
-				++_beg;
-			}
-			return _beg;
+			return const_iterator(_rb_tree.lower_bound(key), _rb_tree.get_last_node(), _rb_tree.right_most());
 		}
 
 		iterator upper_bound( const Key& key )
 		{
-			// return iterator to first greater elm after key
-			//so this to be true iter->first should be greater than key
-			iterator _beg(begin());
-			iterator _end(end());
-			while (_beg != _end)
-			{
-				if (_cmp(key, _beg->first))
-					break ;
-				++_beg;
-			}
-			return _beg;
+			return iterator(_rb_tree.upper_bound(key), _rb_tree.get_last_node(), _rb_tree.right_most());
 		}
 
 		const_iterator upper_bound( const Key& key ) const
 		{
-			// return iterator to first greater elm after key
-			//so this to be true iter->first should be greater than key
-			const_iterator _beg(begin());
-			const_iterator _end(end());
-			while (_beg != _end)
-			{
-				if (_cmp(key, _beg->first))
-					break ;
-				++_beg;
-			}
-			return _beg;
+			return const_iterator(_rb_tree.upper_bound(key), _rb_tree.get_last_node(), _rb_tree.right_most());
 		}
 		
 		key_compare key_comp() const
@@ -318,17 +280,10 @@ class map{
 		
 		ft::pair<iterator,iterator> equal_range(const Key& key)
 		{
-			iterator _beg(begin());
-			iterator _end(end());
             Key k;
+			iterator _beg(lower_bound(key));
+			iterator _end(_beg);
 
-			while (_beg != _end)
-			{
-				if (!_cmp(_beg->first, key))
-					break ;
-				++_beg;
-			}
-			_end = _beg;
 			k = _beg->first;
 			if (!_cmp(k, key) && !_cmp(key, k))
 				++_end;
@@ -337,17 +292,10 @@ class map{
 
 		ft::pair<const_iterator,const_iterator> equal_range(const Key& key) const
 		{
-			const_iterator _beg(begin());
-			const_iterator _end(end());
             Key k;
+			const_iterator _beg(lower_bound(key));
+			const_iterator _end(_beg);
 
-			while (_beg != _end)
-			{
-				if (!_cmp(_beg->first, key))
-					break ;
-				++_beg;
-			}
-			_end = _beg;
             k = _beg->first; // start of change
 			if (!_cmp(k, key) && !_cmp(key, k)) // check for // assigment // end of change
 				++_end;
