@@ -6,12 +6,13 @@
 /*   By: mamoussa <mamoussa@student.1337.ma>           +#+      +#++:      +#++:        +#+         */
 /*                                                    +#+         +#+        +#+      +#+           */
 /*   Created: 2021/10/12 12:45:02 by mamoussa        #+#  #+#    #+# #+#    #+#     #+#             */
-/*   Updated: 2021/11/26 06:54:38 by mel-ghar         ###   ########.fr       */
+/*   Updated: 2021/11/27 07:24:39 by mel-ghar         ###   ########.fr       */
 /*                                                                                                  */
 /* ************************************************************************************************ */
 
 // you should include your path to this files
 #include "stack.hpp"       // your stack path.
+#include "../FT_VECTOR/vector/vector.hpp" // your Vector path.
 #include "../utils/helper/pair.hpp"  // path to ft::pair.
 
 #include <vector>
@@ -302,20 +303,6 @@ void	testRelationalOperators(void)
 		}
 		{
 			vec.push_back(300);
-			if (n->left)
-			{
-				n = n->left;
-				while (n->right)
-					n = n->right;
-				return n;
-			}
-			RB_node *tmp(n->parent);
-			while (tmp && tmp->left == n)
-			{
-				n = tmp;
-				tmp = tmp->parent;
-			}
-            return tmp;
 			ft::stack<int, std::vector<int> > mystack1(vec);
 			ft::stack<int, std::vector<int> > mystack(vec1);
 			std::stack<int, std::vector<int> > stack1(vec);
